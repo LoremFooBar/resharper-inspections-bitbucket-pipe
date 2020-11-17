@@ -1,0 +1,42 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Resharper.CodeInspections.BitbucketPipe", "src\Resharper.CodeInspections.BitbucketPipe\Resharper.CodeInspections.BitbucketPipe.csproj", "{53392CB8-3EFC-440A-B51A-50FBB8DAC4FB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6A52C4FA-50EB-43AC-BEB3-8760B50CB46C}"
+ProjectSection(SolutionItems) = preProject
+	.editorconfig = .editorconfig
+	.gitignore = .gitignore
+	commitlint.config.js = commitlint.config.js
+	Directory.Build.props = Directory.Build.props
+	inspectcode.config = inspectcode.config
+	Dockerfile = Dockerfile
+	pipe.yml = pipe.yml
+	README.md = README.md
+EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Resharper.CodeInspections.BitbucketPipe.Tests", "tests\Resharper.CodeInspections.BitbucketPipe.Tests\Resharper.CodeInspections.BitbucketPipe.Tests.csproj", "{CA6F7D57-75F8-4E17-B59D-C4469E96384D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{39D624AA-F446-4E86-B0BC-09FC0825DDFD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{47B8A0A0-0CD9-4D96-BF2E-5DD3604190D1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{53392CB8-3EFC-440A-B51A-50FBB8DAC4FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{53392CB8-3EFC-440A-B51A-50FBB8DAC4FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{53392CB8-3EFC-440A-B51A-50FBB8DAC4FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{53392CB8-3EFC-440A-B51A-50FBB8DAC4FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA6F7D57-75F8-4E17-B59D-C4469E96384D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA6F7D57-75F8-4E17-B59D-C4469E96384D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA6F7D57-75F8-4E17-B59D-C4469E96384D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA6F7D57-75F8-4E17-B59D-C4469E96384D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{53392CB8-3EFC-440A-B51A-50FBB8DAC4FB} = {39D624AA-F446-4E86-B0BC-09FC0825DDFD}
+		{CA6F7D57-75F8-4E17-B59D-C4469E96384D} = {47B8A0A0-0CD9-4D96-BF2E-5DD3604190D1}
+	EndGlobalSection
+EndGlobal
