@@ -7,6 +7,7 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Threading.Tasks;
+using System.Web;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Resharper.CodeInspections.BitbucketPipe.Model.Bitbucket.CodeAnnotations;
@@ -57,7 +58,7 @@ namespace Resharper.CodeInspections.BitbucketPipe
             _logger.LogDebug("Sending request: PUT reports/{externalId}", report.ExternalId);
             _logger.LogDebug("Sending report: {report}", serializedReport);
 
-            var createReportResponse = await _httpClient.PutAsync($"reports/{report.ExternalId}",
+            var createReportResponse = await _httpClient.PutAsync($"reports/{HttpUtility.UrlEncode(report.ExternalId)}",
                 new StringContent(serializedReport, Encoding.Default, "application/json"));
 
             _logger.LogDebug("Request returned status {statusCode}", createReportResponse.StatusCode);
@@ -82,7 +83,8 @@ namespace Resharper.CodeInspections.BitbucketPipe
                     annotationsToUpload.Count, numOfAnnotationsUploaded);
                 _logger.LogDebug("Annotations in request: {annotations}", serializedAnnotations);
 
-                var annotationsResponse = await _httpClient.PostAsync($"reports/{report.ExternalId}/annotations",
+                var annotationsResponse = await _httpClient.PostAsync(
+                    $"reports/{HttpUtility.UrlEncode(report.ExternalId)}/annotations",
                     new StringContent(serializedAnnotations, Encoding.Default, "application/json"));
 
                 _logger.LogDebug("Request returned status {statusCode}", annotationsResponse.StatusCode);

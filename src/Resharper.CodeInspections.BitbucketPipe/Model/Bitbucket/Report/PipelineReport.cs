@@ -25,7 +25,7 @@ namespace Resharper.CodeInspections.BitbucketPipe.Model.Bitbucket.Report
             {
                 Title = "ReSharper Inspections",
                 Details = $"Found {issuesReport.TotalIssues} issue(s) in solution {issuesReport.Information.Solution}",
-                ExternalId = "ReSharper Inspections",
+                ExternalId = "resharper-inspections",
                 Reporter = "ReSharper",
                 ReportType = ReportType.Bug,
                 Result = issuesReport.HasAnyIssues ? Result.Failed : Result.Passed
