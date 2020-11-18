@@ -61,7 +61,10 @@ namespace Resharper.CodeInspections.BitbucketPipe
             var createReportResponse = await _httpClient.PutAsync($"reports/{HttpUtility.UrlEncode(report.ExternalId)}",
                 new StringContent(serializedReport, Encoding.Default, "application/json"));
 
-            _logger.LogDebug("Request returned status {statusCode}", createReportResponse.StatusCode);
+            if (!createReportResponse.IsSuccessStatusCode) {
+                string error = await createReportResponse.Content.ReadAsStringAsync();
+                _logger.LogError("Error response: {error}", error);
+            }
 
             createReportResponse.EnsureSuccessStatusCode();
 
@@ -87,7 +90,10 @@ namespace Resharper.CodeInspections.BitbucketPipe
                     $"reports/{HttpUtility.UrlEncode(report.ExternalId)}/annotations",
                     new StringContent(serializedAnnotations, Encoding.Default, "application/json"));
 
-                _logger.LogDebug("Request returned status {statusCode}", annotationsResponse.StatusCode);
+                if (!annotationsResponse.IsSuccessStatusCode) {
+                    string error = await annotationsResponse.Content.ReadAsStringAsync();
+                    _logger.LogError("Error response: {error}", error);
+                }
 
                 annotationsResponse.EnsureSuccessStatusCode();
 
