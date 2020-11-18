@@ -31,18 +31,26 @@ namespace Resharper.CodeInspections.BitbucketPipe
             string repoSlug = Utils.GetRequiredEnvironmentVariable("BITBUCKET_REPO_SLUG");
             string commitHash = Utils.GetRequiredEnvironmentVariable("BITBUCKET_COMMIT");
 
+            string baseAddressScheme;
+
             if (Utils.IsDevelopment) {
                 string? accessToken = options.Value.AccessToken;
                 if (!string.IsNullOrEmpty(accessToken)) {
                     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
                 }
+
+                // when using the proxy in an actual pipelines environment, requests must be sent over http
+                baseAddressScheme = "https";
+            }
+            else {
+                baseAddressScheme = "http";
             }
 
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
             client.BaseAddress =
                 new Uri(
-                    $"https://api.bitbucket.org/2.0/repositories/{workspace}/{repoSlug}/commit/{commitHash}/");
+                    $"{baseAddressScheme}://api.bitbucket.org/2.0/repositories/{workspace}/{repoSlug}/commit/{commitHash}/");
 
             _logger.LogDebug("Base address: {baseAddress}", client.BaseAddress);
         }
