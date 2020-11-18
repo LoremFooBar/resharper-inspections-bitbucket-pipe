@@ -5,8 +5,8 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
-    
-    <Version>0.1.0</Version>
+
+    <Version>0.1.1</Version>
   </PropertyGroup>
 
   <ItemGroup>
