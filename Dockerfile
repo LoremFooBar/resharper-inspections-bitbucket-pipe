@@ -21,4 +21,4 @@ WORKDIR /app
 
 COPY --from=build /app .
 
-ENTRYPOINT ["dotnet", "Resharper.CodeInspections.BitbucketPipe.dll"]
+ENTRYPOINT ["dotnet", "/app/Resharper.CodeInspections.BitbucketPipe.dll"]
