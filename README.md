@@ -7,18 +7,19 @@ Create a report with annotations from a ReSharper inspections XML.
 Add the following snippet to the script section of your `bitbucket-pipelines.yml` file:
 
 ```yaml
-- pipe: docker://lazyboy1/resharper-inspections-bitbucket-pipe:0.1.3
-  variables:
+script:
+  - pipe: docker://lazyboy1/resharper-inspections-bitbucket-pipe:0.1.4
+    variables:
       INSPECTIONS_XML_PATH: "<string>"
       # DEBUG: '<boolean>' # Optional, not yet implemented
 ```
 
 ## Variables
 
-| Variable                  | Usage                                                                                                                                                                                 |
-| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| INSPECTIONS_XML_PATH (\*) | Path to inspections xml file. You can use patterns that <br/> are supported by [DirectoryInfo.GetFiles](https://docs.microsoft.com/en-us/dotnet/api/system.io.directoryinfo.getfiles) |
-| DEBUG                     | Turn on extra debug information. Default: `false`.                                                                                                                                    |
+| Variable                  | Usage |
+| ------------------------- | ----- |
+| INSPECTIONS_XML_PATH (\*) | Path to inspections xml file, relative to current directory. You can use patterns that <br/> are supported by [DirectoryInfo.GetFiles](https://docs.microsoft.com/en-us/dotnet/api/system.io.directoryinfo.getfiles) |
+| DEBUG                     | Turn on extra debug information. Default: `false`.                                                                                                                                                                   |
 
 _(\*) = required variable._
 
@@ -34,18 +35,18 @@ Basic example:
 
 ```yaml
 script:
-    - pipe: docker://lazyboy1/resharper-inspections-bitbucket-pipe:0.1.3
-      variables:
-          INSPECTIONS_XML_PATH: "inspect.xml"
+  - pipe: docker://lazyboy1/resharper-inspections-bitbucket-pipe:0.1.4
+    variables:
+      INSPECTIONS_XML_PATH: "inspect.xml"
 ```
 
 With pattern:
 
 ```yaml
 script:
-    - pipe: docker://lazyboy1/resharper-inspections-bitbucket-pipe:0.1.3
-      variables:
-          INSPECTIONS_XML_PATH: "src/*/inspect.xml"
+  - pipe: docker://lazyboy1/resharper-inspections-bitbucket-pipe:0.1.4
+    variables:
+      INSPECTIONS_XML_PATH: "src/*/inspect.xml"
 ```
 
 ## Support

@@ -1,5 +1,5 @@
 name: ReSharper Inspections
-image: lazyboy1/resharper-inspections-bitbucket-pipe:0.1.3
+image: lazyboy1/resharper-inspections-bitbucket-pipe:0.1.4
 description: Post ReSharper inspections to Bitbucket as a report with annotations
 category: Code quality
 repository: https://github.com/lazyboy1/resharper-inspections-bitbucket-pipe
