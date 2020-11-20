@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Serilog;
 
 namespace Resharper.CodeInspections.BitbucketPipe.Model.Bitbucket.CodeAnnotations
 {
@@ -35,17 +36,40 @@ namespace Resharper.CodeInspections.BitbucketPipe.Model.Bitbucket.CodeAnnotation
                     ? ""
                     : Environment.NewLine + $"Wiki URL: {issueType.WikiUrl}");
 
+                string relativePathPart = GetRelativePathPart();
+
+                // path char in ReSharper report is always '\' regardless of platform
+                string issueFilePath = issue.File.Replace('\\', '/');
+
                 yield return new Annotation
                 {
                     ExternalId = $"issue-{i + 1}",
                     AnnotationType = AnnotationType.CodeSmell,
-                    Path = issue.File.Replace("\\", "/"), // todo what if I `cd src`?
+                    Path = System.IO.Path.Combine(relativePathPart, issueFilePath),
                     Line = issue.Line,
                     Summary = issueType.Description,
                     Details = details,
                     Result = AnnotationResult.Failed
                 };
             }
+        }
+
+        private static string GetRelativePathPart()
+        {
+            string currentDir = Environment.CurrentDirectory;
+            string clonePath = Environment.GetEnvironmentVariable("BITBUCKET_CLONE_DIR") ?? currentDir;
+
+            // get the relative path from clone root dir to current dir
+            string relativePathPart = System.IO.Path.GetRelativePath(clonePath, currentDir);
+
+            if (relativePathPart[0] == '.') {
+                relativePathPart = relativePathPart.Remove(0, 1);
+            }
+
+            Log.Logger.Debug("clone directory: {clonePath}", clonePath);
+            Log.Logger.Debug("relative path part: {relativePath}", relativePathPart);
+
+            return relativePathPart;
         }
     }
 }
