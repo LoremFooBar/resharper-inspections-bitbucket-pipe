@@ -8,7 +8,7 @@ Add the following snippet to the script section of your `bitbucket-pipelines.yml
 
 ```yaml
 script:
-  - pipe: docker://lazyboy1/resharper-inspections-bitbucket-pipe:0.1.4
+  - pipe: docker://lazyboy1/resharper-inspections-bitbucket-pipe:0.1.5
     variables:
       INSPECTIONS_XML_PATH: "<string>"
       # DEBUG: '<boolean>' # Optional, not yet implemented
@@ -35,7 +35,7 @@ Basic example:
 
 ```yaml
 script:
-  - pipe: docker://lazyboy1/resharper-inspections-bitbucket-pipe:0.1.4
+  - pipe: docker://lazyboy1/resharper-inspections-bitbucket-pipe:0.1.5
     variables:
       INSPECTIONS_XML_PATH: "inspect.xml"
 ```
@@ -44,7 +44,7 @@ With pattern:
 
 ```yaml
 script:
-  - pipe: docker://lazyboy1/resharper-inspections-bitbucket-pipe:0.1.4
+  - pipe: docker://lazyboy1/resharper-inspections-bitbucket-pipe:0.1.5
     variables:
       INSPECTIONS_XML_PATH: "src/*/inspect.xml"
 ```
