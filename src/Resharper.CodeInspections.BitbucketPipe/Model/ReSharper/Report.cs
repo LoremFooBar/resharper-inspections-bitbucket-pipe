@@ -20,10 +20,10 @@ namespace Resharper.CodeInspections.BitbucketPipe.Model.ReSharper
         // public string ToolsVersion { get; set; }
 
         [XmlIgnore]
-        public int TotalIssues => AllIssues.Count();
+        public int TotalIssues => AllIssues.Count;
 
         [XmlIgnore]
-        public bool HasAnyIssues => Issues.Projects != null;
+        public bool HasAnyIssues => Issues.Projects?.Any() == true;
 
         [XmlIgnore]
         public List<Issue> AllIssues => Issues.Projects?.SelectMany(x => x.Issues).ToList() ?? new List<Issue>();
