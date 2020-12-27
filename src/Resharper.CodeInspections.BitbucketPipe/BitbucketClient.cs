@@ -11,73 +11,60 @@ using System.Web;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Resharper.CodeInspections.BitbucketPipe.Model.Bitbucket.CodeAnnotations;
+using Resharper.CodeInspections.BitbucketPipe.Model.Bitbucket.CommitStatuses;
 using Resharper.CodeInspections.BitbucketPipe.Model.Bitbucket.Report;
 using Resharper.CodeInspections.BitbucketPipe.Options;
 
 namespace Resharper.CodeInspections.BitbucketPipe
 {
-    public class BitbucketClient : IBitbucketClient
+    public class BitbucketClient
     {
         private readonly HttpClient _httpClient;
+        private readonly BitbucketAuthenticationOptions _authOptions;
         private readonly ILogger<BitbucketClient> _logger;
+        private string Workspace { get; } = Utils.GetRequiredEnvironmentVariable("BITBUCKET_WORKSPACE");
+        private string RepoSlug { get; } = Utils.GetRequiredEnvironmentVariable("BITBUCKET_REPO_SLUG");
 
-        public BitbucketClient(HttpClient client, IOptions<BitbucketAuthorizationOptions> options,
+        private string CommitHash { get; }
+
+        public BitbucketClient(HttpClient client, IOptions<BitbucketAuthenticationOptions> authOptions,
             ILogger<BitbucketClient> logger)
         {
             _httpClient = client;
+            _authOptions = authOptions.Value;
             _logger = logger;
 
-            string workspace = Utils.GetRequiredEnvironmentVariable("BITBUCKET_WORKSPACE");
-            string repoSlug = Utils.GetRequiredEnvironmentVariable("BITBUCKET_REPO_SLUG");
-            string commitHash = Utils.GetRequiredEnvironmentVariable("BITBUCKET_COMMIT");
+            CommitHash = Utils.GetRequiredEnvironmentVariable("BITBUCKET_COMMIT");
 
-            string baseAddressScheme;
-
-            if (Utils.IsDevelopment) {
-                string? accessToken = options.Value.AccessToken;
-                if (!string.IsNullOrEmpty(accessToken)) {
-                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-                }
-
-                // when using the proxy in an actual pipelines environment, requests must be sent over http
-                baseAddressScheme = "https";
-            }
-            else {
-                baseAddressScheme = "http";
-            }
+            // when using the proxy in an actual pipelines environment, requests must be sent over http
+            string baseAddressScheme = _authOptions.UseOAuth ? "https" : "http";
 
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
             client.BaseAddress =
                 new Uri(
-                    $"{baseAddressScheme}://api.bitbucket.org/2.0/repositories/{workspace}/{repoSlug}/commit/{commitHash}/");
+                    $"{baseAddressScheme}://api.bitbucket.org/2.0/repositories/{Workspace}/{RepoSlug}/commit/{CommitHash}/");
 
             _logger.LogDebug("Base address: {baseAddress}", client.BaseAddress);
         }
 
         public async Task CreateReportAsync(PipelineReport report, IEnumerable<Annotation> annotations)
         {
-            var serializerOptions = new JsonSerializerOptions
-            {
-                PropertyNamingPolicy = new JsonSnakeCaseNamingPolicy(),
-                IgnoreNullValues = true,
-                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
-            };
-            string serializedReport = JsonSerializer.Serialize(report, serializerOptions);
+            string serializedReport = Serialize(report);
 
             _logger.LogDebug("Sending request: PUT reports/{externalId}", report.ExternalId);
             _logger.LogDebug("Sending report: {report}", serializedReport);
 
-            var createReportResponse = await _httpClient.PutAsync($"reports/{HttpUtility.UrlEncode(report.ExternalId)}",
-                new StringContent(serializedReport, Encoding.Default, "application/json"));
+            var response = await _httpClient.PutAsync($"reports/{HttpUtility.UrlEncode(report.ExternalId)}",
+                CreateStringContent(serializedReport));
 
-            if (!createReportResponse.IsSuccessStatusCode) {
-                string error = await createReportResponse.Content.ReadAsStringAsync();
-                _logger.LogError("Error response: {error}", error);
-            }
+            await VerifyResponseAsync(response);
 
-            createReportResponse.EnsureSuccessStatusCode();
+            await CreateReportAnnotationsAsync(report, annotations);
+        }
 
+        private async Task CreateReportAnnotationsAsync(PipelineReport report, IEnumerable<Annotation> annotations)
+        {
             const int maxAnnotations = 1000;
             const int maxAnnotationsPerRequest = 100;
             int numOfAnnotationsUploaded = 0;
@@ -90,25 +77,61 @@ namespace Resharper.CodeInspections.BitbucketPipe
                 var annotationsToUpload =
                     annotationsList.Skip(numOfAnnotationsUploaded).Take(maxAnnotationsPerRequest).ToList();
 
-                string serializedAnnotations = JsonSerializer.Serialize(annotationsToUpload, serializerOptions);
+                string serializedAnnotations = Serialize(annotationsToUpload);
 
                 _logger.LogDebug("POSTing {totalAnnotations} annotation(s), starting with location {annotationsStart}",
-                    annotationsToUpload.Count, numOfAnnotationsUploaded);
+                    annotationsToUpload.Count.ToString(), numOfAnnotationsUploaded);
                 _logger.LogDebug("Annotations in request: {annotations}", serializedAnnotations);
 
-                var annotationsResponse = await _httpClient.PostAsync(
+                var response = await _httpClient.PostAsync(
                     $"reports/{HttpUtility.UrlEncode(report.ExternalId)}/annotations",
-                    new StringContent(serializedAnnotations, Encoding.Default, "application/json"));
+                    CreateStringContent(serializedAnnotations));
 
-                if (!annotationsResponse.IsSuccessStatusCode) {
-                    string error = await annotationsResponse.Content.ReadAsStringAsync();
-                    _logger.LogError("Error response: {error}", error);
-                }
-
-                annotationsResponse.EnsureSuccessStatusCode();
+                await VerifyResponseAsync(response);
 
                 numOfAnnotationsUploaded += annotationsToUpload.Count;
             }
+        }
+
+        public async Task CreateBuildStatusAsync(PipelineReport report)
+        {
+            if (!_authOptions.UseOAuth) {
+                _logger.LogWarning("Will not create build status because oauth info was not provided");
+                return;
+            }
+            
+            var buildStatus = BuildStatus.CreateFromPipelineReport(report, Workspace, RepoSlug);
+            string serializedBuildStatus = Serialize(buildStatus);
+
+            _logger.LogDebug("POSTing build status: {buildStatus}", serializedBuildStatus);
+
+            var response = await _httpClient.PostAsync("statuses/build", CreateStringContent(serializedBuildStatus));
+
+            await VerifyResponseAsync(response);
+        }
+
+        private static string Serialize(object obj)
+        {
+            var jsonSerializerOptions = new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = new JsonSnakeCaseNamingPolicy(),
+                IgnoreNullValues = true,
+                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+            };
+            return JsonSerializer.Serialize(obj, jsonSerializerOptions);
+        }
+
+        private static StringContent CreateStringContent(string str) =>
+            new StringContent(str, Encoding.Default, "application/json");
+
+        private async Task VerifyResponseAsync(HttpResponseMessage response)
+        {
+            if (!response.IsSuccessStatusCode) {
+                string error = await response.Content.ReadAsStringAsync();
+                _logger.LogError("Error response: {error}", error);
+            }
+
+            response.EnsureSuccessStatusCode();
         }
     }
 }

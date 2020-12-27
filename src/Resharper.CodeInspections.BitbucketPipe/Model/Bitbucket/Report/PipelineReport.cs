@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
+using JetBrains.Annotations;
 
 namespace Resharper.CodeInspections.BitbucketPipe.Model.Bitbucket.Report
 {
-    [Serializable]
+    [Serializable, PublicAPI]
     public class PipelineReport
     {
         //public string Type => "report";
@@ -19,16 +21,20 @@ namespace Resharper.CodeInspections.BitbucketPipe.Model.Bitbucket.Report
         public DateTime? CreatedOn { get; set; }
         public DateTime? UpdatedOn { get; set; }
 
+        [JsonIgnore]
+        public int TotalIssues { get; set; }
+
         public static PipelineReport CreateFromIssuesReport(ReSharper.Report issuesReport)
         {
             var pipelineReport = new PipelineReport
             {
                 Title = "ReSharper Inspections",
-                Details = $"Found {issuesReport.TotalIssues} issue(s) in solution {issuesReport.Information.Solution}",
+                Details = Utils.GetFoundIssuesString(issuesReport.TotalIssues, issuesReport.Information.Solution),
                 ExternalId = "resharper-inspections",
                 Reporter = "ReSharper",
                 ReportType = ReportType.Bug,
-                Result = issuesReport.HasAnyIssues ? Result.Failed : Result.Passed
+                Result = issuesReport.HasAnyIssues ? Result.Failed : Result.Passed,
+                TotalIssues = issuesReport.TotalIssues
             };
 
             return pipelineReport;

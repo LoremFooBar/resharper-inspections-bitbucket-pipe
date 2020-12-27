@@ -20,6 +20,7 @@ namespace Resharper.CodeInspections.BitbucketPipe
             NewWord
         }
 
+        // ReSharper disable once CognitiveComplexity
         public override string ConvertName(string name)
         {
             if (string.IsNullOrEmpty(name)) {
