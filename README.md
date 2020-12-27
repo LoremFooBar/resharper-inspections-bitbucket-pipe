@@ -1,6 +1,7 @@
 ﻿# Bitbucket Pipelines Pipe: ReSharper Inspections Report
 
-Create a report with annotations from a ReSharper inspections XML.
+Create a report with annotations from a ReSharper inspections XML, and a
+corresponding build status with the status of the report.
 
 ## YAML Definition
 
@@ -8,10 +9,12 @@ Add the following snippet to the script section of your `bitbucket-pipelines.yml
 
 ```yaml
 script:
-  - pipe: docker://lazyboy1/resharper-inspections-bitbucket-pipe:0.1.5
+  - pipe: docker://lazyboy1/resharper-inspections-bitbucket-pipe:0.2
     variables:
       INSPECTIONS_XML_PATH: "<string>"
-      # DEBUG: '<boolean>' # Optional, not yet implemented
+      # BITBUCKET_OAUTH_KEY: "<string>" # Optional
+      # BITBUCKET_OAUTH_SECRET: "<string>" # Optional
+      # DEBUG: '<boolean>' # Optional
 ```
 
 ## Variables
@@ -19,15 +22,30 @@ script:
 | Variable                  | Usage |
 | ------------------------- | ----- |
 | INSPECTIONS_XML_PATH (\*) | Path to inspections xml file, relative to current directory. You can use patterns that <br/> are supported by [DirectoryInfo.GetFiles](https://docs.microsoft.com/en-us/dotnet/api/system.io.directoryinfo.getfiles) |
-| DEBUG                     | Turn on extra debug information. Default: `false`.                                                                                                                                                                   |
+| BITBUCKET_OAUTH_KEY       | OAuth consumer key |
+| BITBUCKET_OAUTH_SECRET    | OAuth consumer secret |
+| DEBUG                     | Turn on extra debug information. Default: `false`. |
 
 _(\*) = required variable._
 
 ## Prerequisites
 
+### Inspections File
+
 You need to create the inspections XML file before calling the pipe.
 To create the inspections XML file see
 [InspectCode Command-Line Tool](https://www.jetbrains.com/help/resharper/InspectCode.html).
+
+### OAuth Required for Build Status
+
+Build status will be created only if OAuth key and secret are provided. Otherwise, only
+a pipeline report will be created.
+
+OAuth consumer configuration:
+
+1. Set a callback URL - you can use your Bitbucket workspace URL.
+1. Check the "This is a private consumer" checkbox to enable `client_credentials`.
+2. Allow Repository write permissions
 
 ## Examples
 
@@ -35,7 +53,7 @@ Basic example:
 
 ```yaml
 script:
-  - pipe: docker://lazyboy1/resharper-inspections-bitbucket-pipe:0.1.5
+  - pipe: docker://lazyboy1/resharper-inspections-bitbucket-pipe:0.2
     variables:
       INSPECTIONS_XML_PATH: "inspect.xml"
 ```
@@ -44,14 +62,23 @@ With pattern:
 
 ```yaml
 script:
-  - pipe: docker://lazyboy1/resharper-inspections-bitbucket-pipe:0.1.5
+  - pipe: docker://lazyboy1/resharper-inspections-bitbucket-pipe:0.2
     variables:
       INSPECTIONS_XML_PATH: "src/*/inspect.xml"
 ```
 
-## Support
+With OAuth (you should use secure variables for key and secret):
 
-TBD how to report issues?
+```yaml
+script:
+  - pipe: docker://lazyboy1/resharper-inspections-bitbucket-pipe:0.2
+    variables:
+      INSPECTIONS_XML_PATH: "src/*/inspect.xml"
+      BITBUCKET_OAUTH_KEY: $OAUTH_KEY
+      BITBUCKET_OAUTH_SECRET: $OAUTH_SECRET
+```
+
+## Support
 
 If you're reporting an issue, please include:
 
@@ -61,4 +88,4 @@ If you're reporting an issue, please include:
 
 ## License
 
-Unlicensed at the moment.
+[MIT License](LICENSE)
