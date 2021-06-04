@@ -35,7 +35,7 @@ namespace Resharper.CodeInspections.BitbucketPipe.Model.ReSharper
         public static async Task<Report> CreateFromFileAsync(string filePathOrPattern)
         {
             var currentDir = new DirectoryInfo(Environment.CurrentDirectory);
-            Log.Logger.Debug("Current directory: {directory}", currentDir);
+            Log.Logger.Debug("Current directory: {Directory}", currentDir);
 
             var reportFile = currentDir.GetFiles(filePathOrPattern).FirstOrDefault();
             if (reportFile == null) {
@@ -43,7 +43,7 @@ namespace Resharper.CodeInspections.BitbucketPipe.Model.ReSharper
                     filePathOrPattern);
             }
 
-            Log.Logger.Debug("Found inspections file: {file}", reportFile.FullName);
+            Log.Logger.Debug("Found inspections file: {File}", reportFile.FullName);
 
             await using var fileStream = reportFile.OpenRead();
             Log.Logger.Debug("Deserializing report...");

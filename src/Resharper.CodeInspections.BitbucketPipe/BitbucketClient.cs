@@ -45,15 +45,15 @@ namespace Resharper.CodeInspections.BitbucketPipe
                 new Uri(
                     $"{baseAddressScheme}://api.bitbucket.org/2.0/repositories/{Workspace}/{RepoSlug}/commit/{CommitHash}/");
 
-            _logger.LogDebug("Base address: {baseAddress}", client.BaseAddress);
+            _logger.LogDebug("Base address: {BaseAddress}", client.BaseAddress);
         }
 
         public async Task CreateReportAsync(PipelineReport report, IEnumerable<Annotation> annotations)
         {
             string serializedReport = Serialize(report);
 
-            _logger.LogDebug("Sending request: PUT reports/{externalId}", report.ExternalId);
-            _logger.LogDebug("Sending report: {report}", serializedReport);
+            _logger.LogDebug("Sending request: PUT reports/{ExternalId}", report.ExternalId);
+            _logger.LogDebug("Sending report: {Report}", serializedReport);
 
             var response = await _httpClient.PutAsync($"reports/{HttpUtility.UrlEncode(report.ExternalId)}",
                 CreateStringContent(serializedReport));
@@ -70,7 +70,7 @@ namespace Resharper.CodeInspections.BitbucketPipe
             int numOfAnnotationsUploaded = 0;
             var annotationsList = annotations.ToList(); // avoid multiple enumerations
 
-            _logger.LogDebug("Total annotations: {totalAnnotations}", annotationsList.Count);
+            _logger.LogDebug("Total annotations: {TotalAnnotations}", annotationsList.Count);
 
             while (numOfAnnotationsUploaded < annotationsList.Count &&
                    numOfAnnotationsUploaded + maxAnnotationsPerRequest <= maxAnnotations) {
@@ -79,9 +79,9 @@ namespace Resharper.CodeInspections.BitbucketPipe
 
                 string serializedAnnotations = Serialize(annotationsToUpload);
 
-                _logger.LogDebug("POSTing {totalAnnotations} annotation(s), starting with location {annotationsStart}",
+                _logger.LogDebug("POSTing {TotalAnnotations} annotation(s), starting with location {AnnotationsStart}",
                     annotationsToUpload.Count.ToString(), numOfAnnotationsUploaded);
-                _logger.LogDebug("Annotations in request: {annotations}", serializedAnnotations);
+                _logger.LogDebug("Annotations in request: {Annotations}", serializedAnnotations);
 
                 var response = await _httpClient.PostAsync(
                     $"reports/{HttpUtility.UrlEncode(report.ExternalId)}/annotations",
@@ -99,11 +99,11 @@ namespace Resharper.CodeInspections.BitbucketPipe
                 _logger.LogWarning("Will not create build status because oauth info was not provided");
                 return;
             }
-            
+
             var buildStatus = BuildStatus.CreateFromPipelineReport(report, Workspace, RepoSlug);
             string serializedBuildStatus = Serialize(buildStatus);
 
-            _logger.LogDebug("POSTing build status: {buildStatus}", serializedBuildStatus);
+            _logger.LogDebug("POSTing build status: {BuildStatus}", serializedBuildStatus);
 
             var response = await _httpClient.PostAsync("statuses/build", CreateStringContent(serializedBuildStatus));
 
@@ -128,7 +128,7 @@ namespace Resharper.CodeInspections.BitbucketPipe
         {
             if (!response.IsSuccessStatusCode) {
                 string error = await response.Content.ReadAsStringAsync();
-                _logger.LogError("Error response: {error}", error);
+                _logger.LogError("Error response: {Error}", error);
             }
 
             response.EnsureSuccessStatusCode();

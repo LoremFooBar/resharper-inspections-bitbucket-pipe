@@ -5,30 +5,30 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using IdentityModel;
 using IdentityModel.Client;
-using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using Resharper.CodeInspections.BitbucketPipe.Model.Bitbucket.CodeAnnotations;
 using Resharper.CodeInspections.BitbucketPipe.Model.Bitbucket.Report;
 using Resharper.CodeInspections.BitbucketPipe.Model.ReSharper;
 using Resharper.CodeInspections.BitbucketPipe.Options;
 using Serilog;
+using static Resharper.CodeInspections.BitbucketPipe.LoggerInitializer;
 
 namespace Resharper.CodeInspections.BitbucketPipe
 {
     internal static class Program
     {
-        [PublicAPI]
-        private static async Task Main(string[] args)
+        // ReSharper disable once InconsistentNaming
+        private static async Task Main()
         {
             bool isDebug =
                 Environment.GetEnvironmentVariable("DEBUG")?.Equals("true", StringComparison.OrdinalIgnoreCase)
                 ?? false;
-            Log.Logger = LoggerInitializer.CreateLogger(isDebug);
+            Log.Logger = CreateLogger(isDebug);
 
-            Log.Debug("DEBUG={isDebug}", isDebug);
+            Log.Debug("DEBUG={IsDebug}", isDebug);
 
             string filePathOrPattern = Utils.GetRequiredEnvironmentVariable("INSPECTIONS_XML_PATH");
-            Log.Debug("INSPECTIONS_XML_PATH={xmlPath}", filePathOrPattern);
+            Log.Debug("INSPECTIONS_XML_PATH={XmlPath}", filePathOrPattern);
 
             var serviceProvider = await ConfigureServicesAsync();
 
@@ -64,7 +64,7 @@ namespace Resharper.CodeInspections.BitbucketPipe
                 // set proxy for pipe when running in pipelines
                 const string proxyUrl = "http://host.docker.internal:29418";
 
-                Log.Debug("Using proxy {proxy}", proxyUrl);
+                Log.Debug("Using proxy {Proxy}", proxyUrl);
                 httpClientBuilder.ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
                     {Proxy = new WebProxy(proxyUrl)});
             }
@@ -105,7 +105,7 @@ namespace Resharper.CodeInspections.BitbucketPipe
                 return tokenResponse.AccessToken;
             }
 
-            Log.Error("Error getting access token: {@error}",
+            Log.Error("Error getting access token: {@Error}",
                 new
                 {
                     tokenResponse.Error, tokenResponse.ErrorDescription, tokenResponse.ErrorType,

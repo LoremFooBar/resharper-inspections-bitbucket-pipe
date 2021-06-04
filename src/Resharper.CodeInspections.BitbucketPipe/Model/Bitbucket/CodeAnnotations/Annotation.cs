@@ -66,8 +66,8 @@ namespace Resharper.CodeInspections.BitbucketPipe.Model.Bitbucket.CodeAnnotation
                 relativePathPart = relativePathPart.Remove(0, 1);
             }
 
-            Log.Logger.Debug("clone directory: {clonePath}", clonePath);
-            Log.Logger.Debug("relative path part: {relativePath}", relativePathPart);
+            Log.Logger.Debug("clone directory: {ClonePath}", clonePath);
+            Log.Logger.Debug("relative path part: {RelativePath}", relativePathPart);
 
             return relativePathPart;
         }

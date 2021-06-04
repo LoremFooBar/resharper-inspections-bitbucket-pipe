@@ -4,11 +4,15 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using NUnit.Framework;
+
+// ReSharper disable InconsistentNaming
 
 namespace Resharper.CodeInspections.BitbucketPipe.Tests.BDD
 {
     [SuppressMessage("ReSharper", "MethodHasAsyncOverload")]
+    [PublicAPI]
     public abstract class SpecificationBase
     {
         private void ThrowExceptionInCaseBothSyncAndAsyncMethodImplementationsArePresent()
