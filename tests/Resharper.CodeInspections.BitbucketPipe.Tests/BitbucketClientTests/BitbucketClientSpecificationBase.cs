@@ -15,7 +15,8 @@ namespace Resharper.CodeInspections.BitbucketPipe.Tests.BitbucketClientTests
     {
         protected BitbucketClient BitbucketClient { get; private set; }
         protected Mock<HttpMessageHandler> HttpMessageHandlerMock { get; private set; }
-        protected virtual bool UseOAuth => true;
+        protected virtual bool UseAuthentication => true;
+        protected virtual bool CreateBuildStatus => true;
 
         protected override void Given()
         {
@@ -32,13 +33,17 @@ namespace Resharper.CodeInspections.BitbucketPipe.Tests.BitbucketClientTests
 
             var httpClient = new HttpClient(HttpMessageHandlerMock.Object);
 
-            var options = UseOAuth
-                ? new BitbucketAuthenticationOptions {OAuthKey = "key", OAuthSecret = "secret"}
-                : new BitbucketAuthenticationOptions {OAuthKey = "", OAuthSecret = ""};
+            var authOptionsPoco = UseAuthentication
+                ? new BitbucketAuthenticationOptions {Username = "user", AppPassword = "pass"}
+                : new BitbucketAuthenticationOptions {Username = "", AppPassword = ""};
 
-            var authOptions = Mock.Of<IOptions<BitbucketAuthenticationOptions>>(_ => _.Value == options);
+            var pipeOptionsPoco = new PipeOptions {CreateBuildStatus = CreateBuildStatus};
 
-            BitbucketClient = new BitbucketClient(httpClient, authOptions, NullLogger<BitbucketClient>.Instance);
+            var authOptions = Mock.Of<IOptions<BitbucketAuthenticationOptions>>(_ => _.Value == authOptionsPoco);
+            var pipeOptions = Mock.Of<IOptions<PipeOptions>>(_ => _.Value == pipeOptionsPoco);
+
+            BitbucketClient =
+                new BitbucketClient(httpClient, authOptions, pipeOptions, NullLogger<BitbucketClient>.Instance);
         }
     }
 }

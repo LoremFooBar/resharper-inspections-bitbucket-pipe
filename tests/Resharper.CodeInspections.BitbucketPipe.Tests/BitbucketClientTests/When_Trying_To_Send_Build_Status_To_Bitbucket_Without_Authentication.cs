@@ -8,9 +8,9 @@ using Resharper.CodeInspections.BitbucketPipe.Tests.BDD;
 
 namespace Resharper.CodeInspections.BitbucketPipe.Tests.BitbucketClientTests
 {
-    public class When_Trying_To_Send_Build_Status_To_Bitbucket_Without_OAuth : BitbucketClientSpecificationBase
+    public class When_Trying_To_Send_Build_Status_To_Bitbucket_Without_Authentication : BitbucketClientSpecificationBase
     {
-        protected override bool UseOAuth => false;
+        protected override bool UseAuthentication => false;
 
         protected override async Task WhenAsync()
         {

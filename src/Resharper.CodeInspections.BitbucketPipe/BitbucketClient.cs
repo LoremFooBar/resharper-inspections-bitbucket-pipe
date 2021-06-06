@@ -8,44 +8,54 @@ using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Web;
+using IdentityModel.Client;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Resharper.CodeInspections.BitbucketPipe.Model.Bitbucket.CodeAnnotations;
 using Resharper.CodeInspections.BitbucketPipe.Model.Bitbucket.CommitStatuses;
 using Resharper.CodeInspections.BitbucketPipe.Model.Bitbucket.Report;
 using Resharper.CodeInspections.BitbucketPipe.Options;
+using Resharper.CodeInspections.BitbucketPipe.Utils;
 
 namespace Resharper.CodeInspections.BitbucketPipe
 {
     public class BitbucketClient
     {
         private readonly HttpClient _httpClient;
+        private readonly PipeOptions _pipeOptions;
         private readonly BitbucketAuthenticationOptions _authOptions;
         private readonly ILogger<BitbucketClient> _logger;
-        private string Workspace { get; } = Utils.GetRequiredEnvironmentVariable("BITBUCKET_WORKSPACE");
-        private string RepoSlug { get; } = Utils.GetRequiredEnvironmentVariable("BITBUCKET_REPO_SLUG");
+        private string Workspace { get; } = EnvironmentUtils.GetRequiredEnvironmentVariable("BITBUCKET_WORKSPACE");
+        private string RepoSlug { get; } = EnvironmentUtils.GetRequiredEnvironmentVariable("BITBUCKET_REPO_SLUG");
 
         private string CommitHash { get; }
 
         public BitbucketClient(HttpClient client, IOptions<BitbucketAuthenticationOptions> authOptions,
-            ILogger<BitbucketClient> logger)
+            IOptions<PipeOptions> pipeOptions, ILogger<BitbucketClient> logger)
         {
             _httpClient = client;
+            _pipeOptions = pipeOptions.Value;
             _authOptions = authOptions.Value;
             _logger = logger;
 
-            CommitHash = Utils.GetRequiredEnvironmentVariable("BITBUCKET_COMMIT");
+            CommitHash = EnvironmentUtils.GetRequiredEnvironmentVariable("BITBUCKET_COMMIT");
 
-            // when using the proxy in an actual pipelines environment, requests must be sent over http
-            string baseAddressScheme = _authOptions.UseOAuth ? "https" : "http";
-
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-            client.BaseAddress =
-                new Uri(
-                    $"{baseAddressScheme}://api.bitbucket.org/2.0/repositories/{Workspace}/{RepoSlug}/commit/{CommitHash}/");
+            ConfigureHttpClient();
 
             _logger.LogDebug("Base address: {BaseAddress}", client.BaseAddress);
+        }
+
+        private void ConfigureHttpClient()
+        {
+            string baseUriScheme = _authOptions.UseAuthentication ? "https" : "http";
+            _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            _httpClient.BaseAddress =
+                new Uri(
+                    $"{baseUriScheme}://api.bitbucket.org/2.0/repositories/{Workspace}/{RepoSlug}/commit/{CommitHash}/");
+            if (_authOptions.UseAuthentication) {
+                _logger.LogDebug("Authenticating using app password");
+                _httpClient.SetBasicAuthentication(_authOptions.Username, _authOptions.AppPassword);
+            }
         }
 
         public async Task CreateReportAsync(PipelineReport report, IEnumerable<Annotation> annotations)
@@ -95,8 +105,12 @@ namespace Resharper.CodeInspections.BitbucketPipe
 
         public async Task CreateBuildStatusAsync(PipelineReport report)
         {
-            if (!_authOptions.UseOAuth) {
-                _logger.LogWarning("Will not create build status because oauth info was not provided");
+            if (!_pipeOptions.CreateBuildStatus) {
+                return;
+            }
+
+            if (!_authOptions.UseAuthentication) {
+                _logger.LogWarning("Will not create build status because authentication info was not provided");
                 return;
             }
 

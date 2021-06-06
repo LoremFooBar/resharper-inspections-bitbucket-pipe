@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using IdentityModel;
 using IdentityModel.Client;
 using Microsoft.Extensions.DependencyInjection;
 using Resharper.CodeInspections.BitbucketPipe.Model.Bitbucket.CodeAnnotations;
 using Resharper.CodeInspections.BitbucketPipe.Model.Bitbucket.Report;
 using Resharper.CodeInspections.BitbucketPipe.Model.ReSharper;
 using Resharper.CodeInspections.BitbucketPipe.Options;
+using Resharper.CodeInspections.BitbucketPipe.Utils;
 using Serilog;
 using static Resharper.CodeInspections.BitbucketPipe.LoggerInitializer;
 
@@ -27,10 +26,10 @@ namespace Resharper.CodeInspections.BitbucketPipe
 
             Log.Debug("DEBUG={IsDebug}", isDebug);
 
-            string filePathOrPattern = Utils.GetRequiredEnvironmentVariable("INSPECTIONS_XML_PATH");
+            string filePathOrPattern = EnvironmentUtils.GetRequiredEnvironmentVariable("INSPECTIONS_XML_PATH");
             Log.Debug("INSPECTIONS_XML_PATH={XmlPath}", filePathOrPattern);
 
-            var serviceProvider = await ConfigureServicesAsync();
+            var serviceProvider = ConfigureServices();
 
             var issuesReport = await Report.CreateFromFileAsync(filePathOrPattern);
             var pipelineReport = PipelineReport.CreateFromIssuesReport(issuesReport);
@@ -41,30 +40,34 @@ namespace Resharper.CodeInspections.BitbucketPipe
             await bitbucketClient.CreateBuildStatusAsync(pipelineReport);
         }
 
-        private static async Task<ServiceProvider> ConfigureServicesAsync()
+        private static ServiceProvider ConfigureServices()
         {
+            var authOptions = new BitbucketAuthenticationOptions
+            {
+                Username = Environment.GetEnvironmentVariable("BITBUCKET_USERNAME"),
+                AppPassword = Environment.GetEnvironmentVariable("BITBUCKET_APP_PASSWORD")
+            };
+
+            var pipeOptions = new PipeOptions
+            {
+                CreateBuildStatus = EnvironmentUtils.GetEnvironmentVariableOrDefault("CREATE_BUILD_STATUS", "true")
+                    .Equals(bool.TrueString, StringComparison.OrdinalIgnoreCase)
+            };
+
             var serviceCollection = new ServiceCollection();
             var httpClientBuilder = serviceCollection.AddHttpClient<BitbucketClient>();
 
-            var authOptions = new BitbucketAuthenticationOptions
-            {
-                OAuthKey = Environment.GetEnvironmentVariable("BITBUCKET_OAUTH_KEY"),
-                OAuthSecret = Environment.GetEnvironmentVariable("BITBUCKET_OAUTH_SECRET")
-            };
-
-            if (authOptions.UseOAuth) {
-                Log.Debug("Authenticating using OAuth");
-                string accessToken = await GetAccessTokenAsync(authOptions);
+            if (authOptions.UseAuthentication) {
+                Log.Debug("Authenticating using app password");
                 httpClientBuilder.ConfigureHttpClient(client =>
-                    client.DefaultRequestHeaders.Authorization =
-                        new AuthenticationHeaderValue(OidcConstants.AuthenticationSchemes.AuthorizationHeaderBearer,
-                            accessToken));
+                    client.SetBasicAuthentication(authOptions.Username, authOptions.AppPassword));
             }
-            else if (!Utils.IsDevelopment) {
+            else if (!EnvironmentUtils.IsDevelopment) {
                 // set proxy for pipe when running in pipelines
                 const string proxyUrl = "http://host.docker.internal:29418";
 
                 Log.Debug("Using proxy {Proxy}", proxyUrl);
+                Log.Information("Not using authentication - can't create build status");
                 httpClientBuilder.ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
                     {Proxy = new WebProxy(proxyUrl)});
             }
@@ -74,45 +77,17 @@ namespace Resharper.CodeInspections.BitbucketPipe
 
             serviceCollection
                 .AddLogging(builder => builder.AddSerilog())
+                // todo try to replace `Configure` with `AddOptions` and `AddSingleton`
                 .Configure<BitbucketAuthenticationOptions>(options =>
                 {
-                    options.OAuthKey = authOptions.OAuthKey;
-                    options.OAuthSecret = authOptions.OAuthSecret;
-                });
+                    options.Username = authOptions.Username;
+                    options.AppPassword = authOptions.AppPassword;
+                })
+                .Configure<PipeOptions>(options => options.CreateBuildStatus = pipeOptions.CreateBuildStatus);
 
             var serviceProvider = serviceCollection.BuildServiceProvider();
 
             return serviceProvider;
-        }
-
-        private static async Task<string> GetAccessTokenAsync(BitbucketAuthenticationOptions options)
-        {
-            Log.Debug("Getting access token...");
-
-            using var httpClient = new HttpClient();
-            var tokenRequest = new ClientCredentialsTokenRequest
-            {
-                ClientId = options.OAuthKey,
-                ClientSecret = options.OAuthSecret,
-                Scope = "repository:write",
-                Address = "https://bitbucket.org/site/oauth2/access_token"
-            };
-
-            var tokenResponse = await httpClient.RequestClientCredentialsTokenAsync(tokenRequest);
-
-            if (!tokenResponse.IsError) {
-                Log.Debug("Got access token");
-                return tokenResponse.AccessToken;
-            }
-
-            Log.Error("Error getting access token: {@Error}",
-                new
-                {
-                    tokenResponse.Error, tokenResponse.ErrorDescription, tokenResponse.ErrorType,
-                    tokenResponse.HttpStatusCode
-                });
-
-            throw new OAuthException(tokenResponse);
         }
     }
 }

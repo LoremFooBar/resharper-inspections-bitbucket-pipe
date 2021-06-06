@@ -2,6 +2,7 @@
 using System.Text.Json.Serialization;
 using JetBrains.Annotations;
 using Resharper.CodeInspections.BitbucketPipe.Model.Bitbucket.Report;
+using Resharper.CodeInspections.BitbucketPipe.Utils;
 
 namespace Resharper.CodeInspections.BitbucketPipe.Model.Bitbucket.CommitStatuses
 {
@@ -39,7 +40,7 @@ namespace Resharper.CodeInspections.BitbucketPipe.Model.Bitbucket.CommitStatuses
                 _ => throw new ArgumentOutOfRangeException(nameof(report.Result))
             };
 
-            string description = Utils.GetFoundIssuesString(report.TotalIssues);
+            string description = PipeUtils.GetFoundIssuesString(report.TotalIssues);
 
             return new BuildStatus(key, name, state, description, workspace, repoSlug);
         }
