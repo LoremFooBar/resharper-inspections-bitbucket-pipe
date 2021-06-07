@@ -2,6 +2,12 @@
   "version": 1,
   "dependencies": {
     ".NETCoreApp,Version=v5.0": {
+      "coverlet.collector": {
+        "type": "Direct",
+        "requested": "[3.0.3, )",
+        "resolved": "3.0.3",
+        "contentHash": "PdyhdzG2LK7YUEtccObPql+3OuFODaFNeYayxdPoK1eHb2StZoeQf1WMb16QrKiIdi4fs5Kog8jxXtlZOgAEuA=="
+      },
       "FluentAssertions": {
         "type": "Direct",
         "requested": "[5.10.3, )",
@@ -10,6 +16,12 @@
         "dependencies": {
           "System.Configuration.ConfigurationManager": "4.4.0"
         }
+      },
+      "JunitXml.TestLogger": {
+        "type": "Direct",
+        "requested": "[3.0.98, )",
+        "resolved": "3.0.98",
+        "contentHash": "S+bz5mohyfiNc2ueDsyU4KZ9w3wQIcsauxf9/zc3BY0iEih7+nPO4/BrQ1x4819KUHCtgN2LzBy+ZjGDGodJeg=="
       },
       "Microsoft.NET.Test.Sdk": {
         "type": "Direct",
