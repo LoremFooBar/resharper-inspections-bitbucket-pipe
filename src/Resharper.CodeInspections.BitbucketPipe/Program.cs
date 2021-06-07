@@ -19,12 +19,8 @@ namespace Resharper.CodeInspections.BitbucketPipe
         // ReSharper disable once InconsistentNaming
         private static async Task Main()
         {
-            bool isDebug =
-                Environment.GetEnvironmentVariable("DEBUG")?.Equals("true", StringComparison.OrdinalIgnoreCase)
-                ?? false;
-            Log.Logger = CreateLogger(isDebug);
-
-            Log.Debug("DEBUG={IsDebug}", isDebug);
+            Log.Logger = CreateLogger(EnvironmentUtils.IsDebugMode);
+            Log.Debug("DEBUG={IsDebug}", EnvironmentUtils.IsDebugMode);
 
             string filePathOrPattern = EnvironmentUtils.GetRequiredEnvironmentVariable("INSPECTIONS_XML_PATH");
             Log.Debug("INSPECTIONS_XML_PATH={XmlPath}", filePathOrPattern);

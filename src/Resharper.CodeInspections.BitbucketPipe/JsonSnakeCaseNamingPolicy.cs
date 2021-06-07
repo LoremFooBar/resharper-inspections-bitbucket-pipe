@@ -5,11 +5,13 @@
 // See also: https://github.com/dotnet/runtime/issues/782
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Text.Json;
 
 namespace Resharper.CodeInspections.BitbucketPipe
 {
+    [ExcludeFromCodeCoverage]
     public class JsonSnakeCaseNamingPolicy : JsonNamingPolicy
     {
         private enum SnakeCaseState

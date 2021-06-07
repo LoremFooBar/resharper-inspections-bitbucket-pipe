@@ -20,9 +20,6 @@ namespace Resharper.CodeInspections.BitbucketPipe.Model.ReSharper
         [XmlElement(ElementName = "Issues")]
         public Issues Issues { get; set; } = null!;
 
-        // [XmlAttribute(AttributeName = "ToolsVersion")]
-        // public string ToolsVersion { get; set; }
-
         [XmlIgnore]
         public int TotalIssues => AllIssues.Count;
 
