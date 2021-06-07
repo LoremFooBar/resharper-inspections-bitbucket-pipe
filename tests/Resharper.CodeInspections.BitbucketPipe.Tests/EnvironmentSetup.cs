@@ -4,9 +4,9 @@ namespace Resharper.CodeInspections.BitbucketPipe.Tests
 {
     public static class EnvironmentSetup
     {
-        public static void SetupEnvironment()
+        public static void SetupEnvironment(string inspectionsXmlPath)
         {
-            Environment.SetEnvironmentVariable("INSPECTIONS_XML_PATH", "inspect.xml");
+            Environment.SetEnvironmentVariable("INSPECTIONS_XML_PATH", inspectionsXmlPath);
 
             Environment.SetEnvironmentVariable("BITBUCKET_WORKSPACE", "workspace");
             Environment.SetEnvironmentVariable("BITBUCKET_REPO_SLUG", "repo-slug");
