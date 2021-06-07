@@ -1,4 +1,4 @@
-﻿FROM mcr.microsoft.com/dotnet/sdk:3.1 as build
+﻿FROM mcr.microsoft.com/dotnet/sdk:5.0 as build
 
 LABEL maintainer="@lazyboy1"
 
@@ -15,7 +15,7 @@ COPY src/$ProjectName/. ./
 RUN dotnet publish -c release -o /app
 
 
-FROM mcr.microsoft.com/dotnet/runtime:3.1 as runtime
+FROM mcr.microsoft.com/dotnet/runtime:5.0 as runtime
 
 WORKDIR /app
 

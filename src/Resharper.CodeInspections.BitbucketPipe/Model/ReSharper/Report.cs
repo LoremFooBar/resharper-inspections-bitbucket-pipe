@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using Serilog;
@@ -27,7 +28,8 @@ namespace Resharper.CodeInspections.BitbucketPipe.Model.ReSharper
         public bool HasAnyIssues => Issues.Projects?.Any() == true;
 
         [XmlIgnore]
-        public List<Issue> AllIssues => Issues.Projects?.SelectMany(x => x.Issues).ToList() ?? new List<Issue>();
+        public List<Issue> AllIssues =>
+            Issues.Projects?.Where(p => p.Issues != null).SelectMany(x => x.Issues!).ToList() ?? new List<Issue>();
 
         public static async Task<Report> CreateFromFileAsync(string filePathOrPattern)
         {
@@ -44,9 +46,10 @@ namespace Resharper.CodeInspections.BitbucketPipe.Model.ReSharper
 
             await using var fileStream = reportFile.OpenRead();
             Log.Logger.Debug("Deserializing report...");
-            var issuesReport = (Report) new XmlSerializer(typeof(Report)).Deserialize(fileStream);
+            object deserializedReport = new XmlSerializer(typeof(Report)).Deserialize(fileStream) ??
+                                        throw new SerializationException("Failed to deserialize the report xml");
             Log.Logger.Debug("Report deserialized successfully");
-            return issuesReport;
+            return (Report) deserializedReport;
         }
     }
 }
