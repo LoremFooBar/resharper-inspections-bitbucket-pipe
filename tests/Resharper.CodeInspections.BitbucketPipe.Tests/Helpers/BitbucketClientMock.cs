@@ -7,15 +7,17 @@ using Microsoft.Extensions.Options;
 using Moq;
 using Moq.Protected;
 using Resharper.CodeInspections.BitbucketPipe.Options;
+using Resharper.CodeInspections.BitbucketPipe.Utils;
 
-namespace Resharper.CodeInspections.BitbucketPipe.Tests
+namespace Resharper.CodeInspections.BitbucketPipe.Tests.Helpers
 {
     public class BitbucketClientMock
     {
         public BitbucketClient BitbucketClient { get; }
         public Mock<HttpMessageHandler> HttpMessageHandlerMock { get; }
 
-        public BitbucketClientMock(bool useAuthentication, bool createBuildStatus)
+        public BitbucketClientMock(bool useAuthentication, bool createBuildStatus,
+            BitbucketEnvironmentInfo environmentInfo)
         {
             HttpMessageHandlerMock = new Mock<HttpMessageHandler>();
             HttpMessageHandlerMock
@@ -36,7 +38,8 @@ namespace Resharper.CodeInspections.BitbucketPipe.Tests
             var pipeOptions = Mock.Of<IOptions<PipeOptions>>(_ => _.Value == pipeOptionsPoco);
 
             BitbucketClient =
-                new BitbucketClient(httpClient, authOptions, pipeOptions, NullLogger<BitbucketClient>.Instance);
+                new BitbucketClient(httpClient, authOptions, pipeOptions, environmentInfo,
+                    NullLogger<BitbucketClient>.Instance);
         }
     }
 }

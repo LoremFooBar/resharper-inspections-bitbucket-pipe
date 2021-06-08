@@ -3,5 +3,6 @@
     public class PipeOptions
     {
         public bool CreateBuildStatus { get; set; }
+        public string InspectionsXmlPathOrPattern { get; set; } = "";
     }
 }

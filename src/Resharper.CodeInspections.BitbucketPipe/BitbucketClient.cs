@@ -22,23 +22,20 @@ namespace Resharper.CodeInspections.BitbucketPipe
     public class BitbucketClient
     {
         private readonly HttpClient _httpClient;
+        private readonly BitbucketEnvironmentInfo _bitbucketEnvironmentInfo;
         private readonly PipeOptions _pipeOptions;
         private readonly BitbucketAuthenticationOptions _authOptions;
         private readonly ILogger<BitbucketClient> _logger;
-        private string Workspace { get; } = EnvironmentUtils.GetRequiredEnvironmentVariable("BITBUCKET_WORKSPACE");
-        private string RepoSlug { get; } = EnvironmentUtils.GetRequiredEnvironmentVariable("BITBUCKET_REPO_SLUG");
-
-        private string CommitHash { get; }
 
         public BitbucketClient(HttpClient client, IOptions<BitbucketAuthenticationOptions> authOptions,
-            IOptions<PipeOptions> pipeOptions, ILogger<BitbucketClient> logger)
+            IOptions<PipeOptions> pipeOptions, BitbucketEnvironmentInfo bitbucketEnvironmentInfo,
+            ILogger<BitbucketClient> logger)
         {
             _httpClient = client;
+            _bitbucketEnvironmentInfo = bitbucketEnvironmentInfo;
             _pipeOptions = pipeOptions.Value;
             _authOptions = authOptions.Value;
             _logger = logger;
-
-            CommitHash = EnvironmentUtils.GetRequiredEnvironmentVariable("BITBUCKET_COMMIT");
 
             ConfigureHttpClient();
 
@@ -51,7 +48,9 @@ namespace Resharper.CodeInspections.BitbucketPipe
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             _httpClient.BaseAddress =
                 new Uri(
-                    $"{baseUriScheme}://api.bitbucket.org/2.0/repositories/{Workspace}/{RepoSlug}/commit/{CommitHash}/");
+                    $"{baseUriScheme}://api.bitbucket.org/2.0/repositories/" +
+                    $"{_bitbucketEnvironmentInfo.Workspace}/{_bitbucketEnvironmentInfo.RepoSlug}/" +
+                    $"commit/{_bitbucketEnvironmentInfo.CommitHash}/");
             if (_authOptions.UseAuthentication) {
                 _logger.LogDebug("Authenticating using app password");
                 _httpClient.SetBasicAuthentication(_authOptions.Username, _authOptions.AppPassword);
@@ -114,7 +113,8 @@ namespace Resharper.CodeInspections.BitbucketPipe
                 return;
             }
 
-            var buildStatus = BuildStatus.CreateFromPipelineReport(report, Workspace, RepoSlug);
+            var buildStatus = BuildStatus.CreateFromPipelineReport(report, _bitbucketEnvironmentInfo.Workspace,
+                _bitbucketEnvironmentInfo.RepoSlug);
             string serializedBuildStatus = Serialize(buildStatus);
 
             _logger.LogDebug("POSTing build status: {BuildStatus}", serializedBuildStatus);

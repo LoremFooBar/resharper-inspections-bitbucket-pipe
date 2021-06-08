@@ -3,6 +3,7 @@ using FluentAssertions;
 using Resharper.CodeInspections.BitbucketPipe.Model.Bitbucket.Report;
 using Resharper.CodeInspections.BitbucketPipe.Model.ReSharper;
 using Resharper.CodeInspections.BitbucketPipe.Tests.BDD;
+using Resharper.CodeInspections.BitbucketPipe.Tests.Helpers;
 
 namespace Resharper.CodeInspections.BitbucketPipe.Tests.PipelineReportTests
 {
@@ -12,7 +13,7 @@ namespace Resharper.CodeInspections.BitbucketPipe.Tests.PipelineReportTests
 
         protected override async Task WhenAsync()
         {
-            var report = await Report.CreateFromFileAsync(TestUtils.GetEmptyReportFilePath());
+            var report = await Report.CreateFromFileAsync(ExampleReports.GetEmptyReportFilePath());
             _pipelineReport = PipelineReport.CreateFromIssuesReport(report);
         }
 

@@ -11,10 +11,11 @@ namespace Resharper.CodeInspections.BitbucketPipe
         // ReSharper disable once InconsistentNaming
         private static async Task Main()
         {
-            Log.Logger = LoggerInitializer.CreateLogger(EnvironmentUtils.IsDebugMode);
-            Log.Debug("DEBUG={IsDebug}", EnvironmentUtils.IsDebugMode);
+            bool isDebugMode = new PipeEnvironment(new EnvironmentVariableProvider()).IsDebugMode;
+            Log.Logger = LoggerInitializer.CreateLogger(isDebugMode);
+            Log.Debug("DEBUG={IsDebug}", isDebugMode);
 
-            await new PipeRunner().RunPipeAsync();
+            await new PipeRunner(new EnvironmentVariableProvider()).RunPipeAsync();
         }
     }
 }

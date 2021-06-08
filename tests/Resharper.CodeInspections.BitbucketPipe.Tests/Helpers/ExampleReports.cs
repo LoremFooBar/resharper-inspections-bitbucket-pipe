@@ -1,8 +1,8 @@
 ﻿using System.IO;
 
-namespace Resharper.CodeInspections.BitbucketPipe.Tests
+namespace Resharper.CodeInspections.BitbucketPipe.Tests.Helpers
 {
-    public static class TestUtils
+    public static class ExampleReports
     {
         private const string ExampleReportsDirectoryName = "example-reports";
 

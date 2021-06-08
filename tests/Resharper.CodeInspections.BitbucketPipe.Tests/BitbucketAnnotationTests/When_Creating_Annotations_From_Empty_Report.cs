@@ -3,18 +3,26 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Resharper.CodeInspections.BitbucketPipe.Model.Bitbucket.CodeAnnotations;
 using Resharper.CodeInspections.BitbucketPipe.Model.ReSharper;
+using Resharper.CodeInspections.BitbucketPipe.ModelCreators;
 using Resharper.CodeInspections.BitbucketPipe.Tests.BDD;
+using Resharper.CodeInspections.BitbucketPipe.Tests.Helpers;
 
 namespace Resharper.CodeInspections.BitbucketPipe.Tests.BitbucketAnnotationTests
 {
     public class When_Creating_Annotations_From_Empty_Report : SpecificationBase
     {
         private IEnumerable<Annotation> _annotations;
+        private Report _report;
 
-        protected override async Task WhenAsync()
+        protected override async Task GivenAsync()
         {
-            var report = await Report.CreateFromFileAsync(TestUtils.GetEmptyReportFilePath());
-            _annotations = Annotation.CreateFromIssuesReport(report);
+            await base.GivenAsync();
+            _report = await Report.CreateFromFileAsync(ExampleReports.GetEmptyReportFilePath());
+        }
+
+        protected override void When()
+        {
+            _annotations = new AnnotationsCreator().CreateAnnotationsFromIssuesReport(_report);
         }
 
         [Then]

@@ -4,9 +4,10 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using IdentityModel.Client;
 using Microsoft.Extensions.DependencyInjection;
-using Resharper.CodeInspections.BitbucketPipe.Model.Bitbucket.CodeAnnotations;
+using Microsoft.Extensions.Options;
 using Resharper.CodeInspections.BitbucketPipe.Model.Bitbucket.Report;
 using Resharper.CodeInspections.BitbucketPipe.Model.ReSharper;
+using Resharper.CodeInspections.BitbucketPipe.ModelCreators;
 using Resharper.CodeInspections.BitbucketPipe.Options;
 using Resharper.CodeInspections.BitbucketPipe.Utils;
 using Serilog;
@@ -15,18 +16,26 @@ namespace Resharper.CodeInspections.BitbucketPipe
 {
     public class PipeRunner
     {
+        private readonly IEnvironmentVariableProvider _environmentVariableProvider;
+        private readonly PipeEnvironment _pipeEnvironment;
+
+        public PipeRunner(IEnvironmentVariableProvider environmentVariableProvider)
+        {
+            _environmentVariableProvider = environmentVariableProvider;
+            _pipeEnvironment = new PipeEnvironment(_environmentVariableProvider);
+        }
+
         public async Task RunPipeAsync()
         {
-            string filePathOrPattern = EnvironmentUtils.GetRequiredEnvironmentVariable("INSPECTIONS_XML_PATH");
-            Log.Debug("INSPECTIONS_XML_PATH={XmlPath}", filePathOrPattern);
-
             var services = new ServiceCollection();
             ConfigureServices(services);
             var serviceProvider = services.BuildServiceProvider();
 
-            var issuesReport = await Report.CreateFromFileAsync(filePathOrPattern);
+            var pipeOptions = serviceProvider.GetRequiredService<IOptions<PipeOptions>>();
+            var annotationsCreator = serviceProvider.GetRequiredService<AnnotationsCreator>();
+            var issuesReport = await Report.CreateFromFileAsync(pipeOptions.Value.InspectionsXmlPathOrPattern);
             var pipelineReport = PipelineReport.CreateFromIssuesReport(issuesReport);
-            var annotations = Annotation.CreateFromIssuesReport(issuesReport);
+            var annotations = annotationsCreator.CreateAnnotationsFromIssuesReport(issuesReport);
 
             var bitbucketClient = serviceProvider.GetRequiredService<BitbucketClient>();
             await bitbucketClient.CreateReportAsync(pipelineReport, annotations);
@@ -37,15 +46,20 @@ namespace Resharper.CodeInspections.BitbucketPipe
         {
             var authOptions = new BitbucketAuthenticationOptions
             {
-                Username = Environment.GetEnvironmentVariable("BITBUCKET_USERNAME"),
-                AppPassword = Environment.GetEnvironmentVariable("BITBUCKET_APP_PASSWORD")
+                Username = _environmentVariableProvider.GetEnvironmentVariable("BITBUCKET_USERNAME"),
+                AppPassword = _environmentVariableProvider.GetEnvironmentVariable("BITBUCKET_APP_PASSWORD")
             };
 
+            bool createBuildStatus =
+                _environmentVariableProvider.GetEnvironmentVariableOrDefault("CREATE_BUILD_STATUS", "true")
+                    .Equals(bool.TrueString, StringComparison.OrdinalIgnoreCase);
+
+            string inspectionsXmlPathOrPattern =
+                _environmentVariableProvider.GetRequiredEnvironmentVariable("INSPECTIONS_XML_PATH");
+            Log.Debug("INSPECTIONS_XML_PATH={XmlPath}", inspectionsXmlPathOrPattern);
+
             var pipeOptions = new PipeOptions
-            {
-                CreateBuildStatus = EnvironmentUtils.GetEnvironmentVariableOrDefault("CREATE_BUILD_STATUS", "true")
-                    .Equals(bool.TrueString, StringComparison.OrdinalIgnoreCase)
-            };
+                {CreateBuildStatus = createBuildStatus, InspectionsXmlPathOrPattern = inspectionsXmlPathOrPattern};
 
             SetupBitbucketClient(services, authOptions);
 
@@ -57,10 +71,17 @@ namespace Resharper.CodeInspections.BitbucketPipe
                     options.Username = authOptions.Username;
                     options.AppPassword = authOptions.AppPassword;
                 })
-                .Configure<PipeOptions>(options => options.CreateBuildStatus = pipeOptions.CreateBuildStatus);
+                .Configure<PipeOptions>(options => {
+                    options.CreateBuildStatus = pipeOptions.CreateBuildStatus;
+                    options.InspectionsXmlPathOrPattern = pipeOptions.InspectionsXmlPathOrPattern;
+                })
+                .AddSingleton(_environmentVariableProvider)
+                .AddSingleton(_pipeEnvironment)
+                .AddSingleton<BitbucketEnvironmentInfo>()
+                .AddSingleton<AnnotationsCreator>();
         }
 
-        private static void SetupBitbucketClient(IServiceCollection services, BitbucketAuthenticationOptions authOptions)
+        private void SetupBitbucketClient(IServiceCollection services, BitbucketAuthenticationOptions authOptions)
         {
             var httpClientBuilder = services.AddHttpClient<BitbucketClient>();
 
@@ -69,7 +90,7 @@ namespace Resharper.CodeInspections.BitbucketPipe
                 httpClientBuilder.ConfigureHttpClient(client =>
                     client.SetBasicAuthentication(authOptions.Username, authOptions.AppPassword));
             }
-            else if (!EnvironmentUtils.IsDevelopment) {
+            else if (!_pipeEnvironment.IsDevelopment) {
                 // set proxy for pipe when running in pipelines
                 const string proxyUrl = "http://host.docker.internal:29418";
 

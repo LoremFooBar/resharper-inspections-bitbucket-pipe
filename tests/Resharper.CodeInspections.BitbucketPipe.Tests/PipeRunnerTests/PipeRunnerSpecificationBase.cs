@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Moq;
 using Moq.Protected;
 using Resharper.CodeInspections.BitbucketPipe.Tests.BDD;
+using Resharper.CodeInspections.BitbucketPipe.Tests.Helpers;
+using Resharper.CodeInspections.BitbucketPipe.Utils;
 
 namespace Resharper.CodeInspections.BitbucketPipe.Tests.PipeRunnerTests
 {
@@ -14,9 +16,11 @@ namespace Resharper.CodeInspections.BitbucketPipe.Tests.PipeRunnerTests
         protected BitbucketClientMock BitbucketClientMock { get; set; }
         protected Mock<HttpMessageHandler> HttpMessageHandlerMock => BitbucketClientMock.HttpMessageHandlerMock;
 
+        protected IEnvironmentVariableProvider EnvironmentVariableProvider { get; set; }
+
         protected override async Task WhenAsync()
         {
-            await new TestPipeRunner(BitbucketClientMock).RunPipeAsync();
+            await new TestPipeRunner(BitbucketClientMock, EnvironmentVariableProvider).RunPipeAsync();
         }
 
         protected void VerifySendAsyncCalls(Times times, Expression<Func<HttpRequestMessage, bool>> requestMatch)

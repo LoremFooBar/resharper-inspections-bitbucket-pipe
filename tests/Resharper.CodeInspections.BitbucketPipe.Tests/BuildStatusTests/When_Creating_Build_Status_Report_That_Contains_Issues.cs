@@ -4,6 +4,7 @@ using Resharper.CodeInspections.BitbucketPipe.Model.Bitbucket.CommitStatuses;
 using Resharper.CodeInspections.BitbucketPipe.Model.Bitbucket.Report;
 using Resharper.CodeInspections.BitbucketPipe.Model.ReSharper;
 using Resharper.CodeInspections.BitbucketPipe.Tests.BDD;
+using Resharper.CodeInspections.BitbucketPipe.Tests.Helpers;
 
 namespace Resharper.CodeInspections.BitbucketPipe.Tests.BuildStatusTests
 {
@@ -13,7 +14,7 @@ namespace Resharper.CodeInspections.BitbucketPipe.Tests.BuildStatusTests
 
         protected override async Task WhenAsync()
         {
-            var report = await Report.CreateFromFileAsync(TestUtils.GetNonEmptyReportFilePath());
+            var report = await Report.CreateFromFileAsync(ExampleReports.GetNonEmptyReportFilePath());
             _buildStatus = BuildStatus.CreateFromPipelineReport(PipelineReport.CreateFromIssuesReport(report), "workspace",
                 "repoSlug");
         }
