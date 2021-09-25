@@ -9,7 +9,7 @@ definitions:
           - dotnet tool restore
           - dotnet restore --locked-mode
           - dotnet build --no-restore
-          - dotnet jb inspectcode --config=inspectcode.config
+          - dotnet jb inspectcode --no-build --config=inspectcode.config
 
           # create resharper inspections report
           - pipe: docker://lazyboy1/resharper-inspections-bitbucket-pipe:0.3
