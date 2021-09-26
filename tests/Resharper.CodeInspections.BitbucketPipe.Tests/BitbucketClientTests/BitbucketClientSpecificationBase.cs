@@ -1,5 +1,6 @@
 ﻿using System.Net.Http;
 using Moq;
+using Resharper.CodeInspections.BitbucketPipe.BitbucketApiClient;
 using Resharper.CodeInspections.BitbucketPipe.Tests.BDD;
 using Resharper.CodeInspections.BitbucketPipe.Tests.Helpers;
 using Resharper.CodeInspections.BitbucketPipe.Utils;

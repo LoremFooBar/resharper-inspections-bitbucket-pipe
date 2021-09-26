@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using IdentityModel.Client;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Resharper.CodeInspections.BitbucketPipe.BitbucketApiClient;
 using Resharper.CodeInspections.BitbucketPipe.Model.Bitbucket.Report;
 using Resharper.CodeInspections.BitbucketPipe.Model.ReSharper;
 using Resharper.CodeInspections.BitbucketPipe.ModelCreators;

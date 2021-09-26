@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Moq;
 using Moq.Protected;
+using Resharper.CodeInspections.BitbucketPipe.BitbucketApiClient;
 using Resharper.CodeInspections.BitbucketPipe.Options;
 using Resharper.CodeInspections.BitbucketPipe.Utils;
 

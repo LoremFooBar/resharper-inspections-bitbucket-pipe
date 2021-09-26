@@ -2,6 +2,7 @@
 using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
+using Resharper.CodeInspections.BitbucketPipe.BitbucketApiClient;
 using Resharper.CodeInspections.BitbucketPipe.Tests.Helpers;
 using Resharper.CodeInspections.BitbucketPipe.Utils;
 
