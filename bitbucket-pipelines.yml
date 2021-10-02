@@ -42,8 +42,8 @@ definitions:
             variables:
               BITBUCKET_USERNAME: $CAMILYO_DEV_BB_USERNAME
               BITBUCKET_APP_PASSWORD: $CAMILYO_DEV_BB_APP_PASSWORD
-              LINE_COVERAGE_MINIMUM: "90"
-              BRANCH_COVERAGE_MINIMUM: "70"
+              LINE_COVERAGE_MINIMUM: "93"
+              BRANCH_COVERAGE_MINIMUM: "75"
               PUBLISHED_REPORT_URL: "$COVERAGE_REPORT_BLOB_URL/$BITBUCKET_REPO_SLUG/$BITBUCKET_COMMIT/index.htm$COVERAGE_AZURE_STORAGE_READ_SAS_TOKEN"
               EXTRA_ARGS: ['-plugins:$BITBUCKET_CLONE_DIR/history-storage-plugin/Camilyo.CoverageHistoryStorage.dll',
                            '"-tag:Build #$BITBUCKET_BUILD_NUMBER | Commit ${BITBUCKET_COMMIT:0:8}"',
