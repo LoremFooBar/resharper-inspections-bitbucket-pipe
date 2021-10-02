@@ -10,7 +10,7 @@ your `bitbucket-pipelines.yml` file:
 
 ```yaml
 script:
-  - pipe: docker://lazyboy1/resharper-inspections-bitbucket-pipe:0.3
+  - pipe: docker://lazyboy1/resharper-inspections-bitbucket-pipe:0.4
     variables:
       INSPECTIONS_XML_PATH: "<string>"
       # BITBUCKET_USERNAME: "<string>" # Optional
@@ -54,7 +54,7 @@ Basic example:
 
 ```yaml
 script:
-  - pipe: docker://lazyboy1/resharper-inspections-bitbucket-pipe:0.3
+  - pipe: docker://lazyboy1/resharper-inspections-bitbucket-pipe:0.4
     variables:
       INSPECTIONS_XML_PATH: "inspect.xml"
 ```
@@ -63,7 +63,7 @@ With pattern:
 
 ```yaml
 script:
-  - pipe: docker://lazyboy1/resharper-inspections-bitbucket-pipe:0.3
+  - pipe: docker://lazyboy1/resharper-inspections-bitbucket-pipe:0.4
     variables:
       INSPECTIONS_XML_PATH: "src/*/inspect.xml"
 ```
@@ -72,7 +72,7 @@ With app password (you should use secure variables for username and app password
 
 ```yaml
 script:
-  - pipe: docker://lazyboy1/resharper-inspections-bitbucket-pipe:0.3
+  - pipe: docker://lazyboy1/resharper-inspections-bitbucket-pipe:0.4
     variables:
       INSPECTIONS_XML_PATH: "inspect.xml"
       BITBUCKET_USERNAME: $USERNAME
@@ -83,7 +83,7 @@ With build status creation disabled:
 
 ```yaml
 script:
-  - pipe: docker://lazyboy1/resharper-inspections-bitbucket-pipe:0.3
+  - pipe: docker://lazyboy1/resharper-inspections-bitbucket-pipe:0.4
     variables:
       INSPECTIONS_XML_PATH: "inspect.xml"
       BITBUCKET_USERNAME: $USERNAME
