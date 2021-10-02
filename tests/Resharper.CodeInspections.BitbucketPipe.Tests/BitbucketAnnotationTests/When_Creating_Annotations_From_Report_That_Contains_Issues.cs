@@ -2,23 +2,40 @@
 using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
+using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.Extensions.Options;
 using Resharper.CodeInspections.BitbucketPipe.Model.Bitbucket.CodeAnnotations;
 using Resharper.CodeInspections.BitbucketPipe.Model.ReSharper;
 using Resharper.CodeInspections.BitbucketPipe.ModelCreators;
+using Resharper.CodeInspections.BitbucketPipe.Options;
 using Resharper.CodeInspections.BitbucketPipe.Tests.BDD;
 using Resharper.CodeInspections.BitbucketPipe.Tests.Helpers;
+using Resharper.CodeInspections.BitbucketPipe.Utils;
 
 namespace Resharper.CodeInspections.BitbucketPipe.Tests.BitbucketAnnotationTests
 {
     public class When_Creating_Annotations_From_Report_That_Contains_Issues : SpecificationBase
     {
         private List<Annotation> _annotations;
-        private Report _report;
+        private SimpleReport _report;
 
         protected override async Task GivenAsync()
         {
             await base.GivenAsync();
-            _report = await Report.CreateFromFileAsync(ExampleReports.GetNonEmptyReportFilePath());
+
+            var environmentInfo = new BitbucketEnvironmentInfo
+            {
+                Workspace = "workspace",
+                RepoSlug = "repo-slug",
+                CommitHash = "f46f058a160a42c68e4b30ee4598cbfc"
+            };
+
+            var bitbucketClientSimpleMock = new BitbucketClientSimpleMock(true, true, environmentInfo);
+            var pipeOptions = new OptionsWrapper<PipeOptions>(new PipeOptions());
+            var reSharperReportCreator = new ReSharperReportCreator(pipeOptions, bitbucketClientSimpleMock.BitbucketClient,
+                NullLogger<ReSharperReportCreator>.Instance);
+
+            _report = await reSharperReportCreator.CreateFromFileAsync(TestData.NonEmptyReportFilePath);
         }
 
         protected override void When()
@@ -33,7 +50,7 @@ namespace Resharper.CodeInspections.BitbucketPipe.Tests.BitbucketAnnotationTests
                 .HaveCount(4).And
                 .OnlyContain(annotation => annotation.AnnotationType == AnnotationType.CodeSmell);
 
-            _annotations[0].Line.Should().Be(0);
+            _annotations[0].Line.Should().Be(1);
             _annotations[1].Line.Should().Be(2);
             _annotations[2].Line.Should().Be(5);
             _annotations[3].Line.Should().Be(7);

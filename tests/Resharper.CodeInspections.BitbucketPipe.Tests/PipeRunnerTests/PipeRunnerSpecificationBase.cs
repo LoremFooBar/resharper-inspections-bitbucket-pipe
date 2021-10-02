@@ -1,33 +1,33 @@
-﻿using System;
-using System.Linq.Expressions;
+﻿using System.Net;
 using System.Net.Http;
-using System.Threading;
 using System.Threading.Tasks;
 using Moq;
-using Moq.Protected;
+using Moq.Contrib.HttpClient;
 using Resharper.CodeInspections.BitbucketPipe.Tests.BDD;
-using Resharper.CodeInspections.BitbucketPipe.Tests.Helpers;
-using Resharper.CodeInspections.BitbucketPipe.Utils;
 
 namespace Resharper.CodeInspections.BitbucketPipe.Tests.PipeRunnerTests
 {
     public class PipeRunnerSpecificationBase : SpecificationBase
     {
-        protected BitbucketClientMock BitbucketClientMock { get; set; }
-        protected Mock<HttpMessageHandler> HttpMessageHandlerMock => BitbucketClientMock.HttpMessageHandlerMock;
+        protected TestPipeRunner TestPipeRunner;
+        protected Mock<HttpMessageHandler> MessageHandlerMock;
 
-        protected IEnvironmentVariableProvider EnvironmentVariableProvider { get; set; }
+        protected override void Given()
+        {
+            base.Given();
+
+            MessageHandlerMock = new Mock<HttpMessageHandler>();
+            // return OK for any non-GET request
+            MessageHandlerMock
+                .SetupRequest(request => request.Method != HttpMethod.Get)
+                .ReturnsResponse(HttpStatusCode.OK);
+        }
 
         protected override async Task WhenAsync()
         {
-            await new TestPipeRunner(BitbucketClientMock, EnvironmentVariableProvider).RunPipeAsync();
-        }
+            await base.WhenAsync();
 
-        protected void VerifySendAsyncCalls(Times times, Expression<Func<HttpRequestMessage, bool>> requestMatch)
-        {
-            HttpMessageHandlerMock.Protected()
-                .Verify<Task<HttpResponseMessage>>("SendAsync", times, ItExpr.Is(requestMatch),
-                    ItExpr.IsAny<CancellationToken>());
+            await TestPipeRunner.RunPipeAsync();
         }
     }
 }

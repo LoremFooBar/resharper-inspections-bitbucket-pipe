@@ -1,8 +1,11 @@
-﻿using System.Net.Http;
+﻿using System.Collections.Generic;
+using System.Net.Http;
+using System.Net.Http.Json;
 using Moq;
+using Moq.Contrib.HttpClient;
+using Resharper.CodeInspections.BitbucketPipe.Model.Bitbucket.CodeAnnotations;
 using Resharper.CodeInspections.BitbucketPipe.Tests.BDD;
 using Resharper.CodeInspections.BitbucketPipe.Tests.Helpers;
-using Resharper.CodeInspections.BitbucketPipe.Utils;
 
 namespace Resharper.CodeInspections.BitbucketPipe.Tests.PipeRunnerTests
 {
@@ -12,51 +15,49 @@ namespace Resharper.CodeInspections.BitbucketPipe.Tests.PipeRunnerTests
         {
             base.Given();
 
-            // // EnvironmentSetup.SetupEnvironment(TestUtils.GetNonEmptyReportFilePath());
-            // var environment = new Dictionary<string, string>
-            // {
-            //     ["BITBUCKET_WORKSPACE"] = "workspace",
-            //     ["BITBUCKET_REPO_SLUG"] = "repo-slug",
-            //     ["BITBUCKET_COMMIT"] = "f46f058a160a42c68e4b30ee4598cbfc",
-            //     ["INSPECTIONS_XML_PATH"] = TestUtils.GetNonEmptyReportFilePath()
-            // };
-            // var envMock = new Mock<IEnvironmentVariableProvider>();
-            // envMock.Setup(_ => _.GetEnvironmentVariable(It.IsAny<string>()))
-            //     .Returns((string varName) => environment[varName]);
+            var environmentVariableProvider =
+                new EnvironmentVariableProviderMock(TestData.NonEmptyReportFilePath, new Dictionary<string, string>
+                {
+                    ["BITBUCKET_USERNAME"] = "user",
+                    ["BITBUCKET_APP_PASSWORD"] = "password",
+                    ["CREATE_BUILD_STATUS"] = "true"
+                });
 
-            var environmentInfo = new BitbucketEnvironmentInfo
-            {
-                Workspace = "workspace",
-                RepoSlug = "repo-slug",
-                CommitHash = "f46f058a160a42c68e4b30ee4598cbfc"
-            };
-
-            EnvironmentVariableProvider =
-                new EnvironmentVariableProviderMock(ExampleReports.GetNonEmptyReportFilePath()).Object;
-
-            BitbucketClientMock = new BitbucketClientMock(true, true, environmentInfo);
+            TestPipeRunner = new(environmentVariableProvider.Object, MessageHandlerMock);
         }
 
         [Then]
         public void It_Should_Send_Report_To_Bitbucket()
         {
-            VerifySendAsyncCalls(Times.Once(),
-                request => request.RequestUri.PathAndQuery.EndsWith("/reports/resharper-inspections") &&
-                           request.Method == HttpMethod.Put);
+            MessageHandlerMock.VerifyRequest(
+                request => request.RequestUri!.PathAndQuery.EndsWith("/reports/resharper-inspections") &&
+                           request.Method == HttpMethod.Put,
+                Times.Once());
         }
 
         [Then]
-        public void It_Should_Send_Annotations_To_Bitbucket()
+        public void It_Should_Send_Four_Annotations_To_Bitbucket()
         {
-            VerifySendAsyncCalls(Times.Once(),
-                request => request.RequestUri.PathAndQuery.EndsWith("/annotations") &&
-                           request.Method == HttpMethod.Post);
+            MessageHandlerMock.VerifyRequest(async request =>
+                {
+                    bool isAnnotationsRequest = request.RequestUri!.PathAndQuery.EndsWith("/annotations") &&
+                                                request.Method == HttpMethod.Post;
+                    if (!isAnnotationsRequest) {
+                        return false;
+                    }
+
+                    var annotations = await request.Content!.ReadFromJsonAsync<List<Annotation>>();
+                    return annotations?.Count == 4;
+                },
+                Times.Once());
         }
 
         [Then]
         public void It_Should_Send_Build_Status_To_Bitbucket()
         {
-            VerifySendAsyncCalls(Times.Once(), request => request.RequestUri.PathAndQuery.EndsWith("statuses/build"));
+            MessageHandlerMock.VerifyRequest(
+                request => request.RequestUri!.PathAndQuery.EndsWith("statuses/build"),
+                Times.Once());
         }
     }
 }

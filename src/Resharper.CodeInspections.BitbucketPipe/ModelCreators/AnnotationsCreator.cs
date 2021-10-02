@@ -15,16 +15,16 @@ namespace Resharper.CodeInspections.BitbucketPipe.ModelCreators
 
         public AnnotationsCreator(BitbucketEnvironmentInfo? environmentInfo = null) => _environmentInfo = environmentInfo;
 
-        public IEnumerable<Annotation> CreateAnnotationsFromIssuesReport(Report report)
+        public IEnumerable<Annotation> CreateAnnotationsFromIssuesReport(SimpleReport report)
         {
             if (!report.HasAnyIssues) {
                 yield break;
             }
 
-            var issueTypes = report.IssueTypes.Types!.ToDictionary(t => t.Id, t => t);
+            var issueTypes = report.IssueTypes.ToDictionary(t => t.Id, t => t);
 
             for (int i = 0; i < report.TotalIssues; i++) {
-                var issue = report.AllIssues[i];
+                var issue = report.Issues[i];
                 var issueType = issueTypes[issue.TypeId];
                 string details = issue.Message + (string.IsNullOrWhiteSpace(issueType.WikiUrl)
                     ? ""
@@ -32,14 +32,14 @@ namespace Resharper.CodeInspections.BitbucketPipe.ModelCreators
 
                 string relativePathPart = GetRelativePathPart();
 
-                // path char in ReSharper report is always '\' regardless of platform
-                string issueFilePath = issue.File.Replace('\\', '/');
+                // // path char in ReSharper report is always '\' regardless of platform
+                // string issueFilePath = issue.File.Replace('\\', '/');
 
                 yield return new Annotation
                 {
                     ExternalId = $"issue-{i + 1}",
                     AnnotationType = AnnotationType.CodeSmell,
-                    Path = Path.Combine(relativePathPart, issueFilePath),
+                    Path = Path.Combine(relativePathPart, issue.File),
                     Line = issue.Line,
                     Summary = issueType.Description,
                     Details = details,

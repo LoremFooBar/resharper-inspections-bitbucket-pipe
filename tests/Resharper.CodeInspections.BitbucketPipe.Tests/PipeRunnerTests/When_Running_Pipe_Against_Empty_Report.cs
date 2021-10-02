@@ -1,8 +1,9 @@
-﻿using System.Net.Http;
+﻿using System.Collections.Generic;
+using System.Net.Http;
 using Moq;
+using Moq.Contrib.HttpClient;
 using Resharper.CodeInspections.BitbucketPipe.Tests.BDD;
 using Resharper.CodeInspections.BitbucketPipe.Tests.Helpers;
-using Resharper.CodeInspections.BitbucketPipe.Utils;
 
 namespace Resharper.CodeInspections.BitbucketPipe.Tests.PipeRunnerTests
 {
@@ -12,49 +13,39 @@ namespace Resharper.CodeInspections.BitbucketPipe.Tests.PipeRunnerTests
         {
             base.Given();
 
-            // //EnvironmentSetup.SetupEnvironment(TestUtils.GetEmptyReportFilePath());
-            // var environment = new Dictionary<string, string>
-            // {
-            //     ["BITBUCKET_WORKSPACE"] = "workspace",
-            //     ["BITBUCKET_REPO_SLUG"] = "repo-slug",
-            //     ["BITBUCKET_COMMIT"] = "f46f058a160a42c68e4b30ee4598cbfc",
-            //     ["INSPECTIONS_XML_PATH"] = TestUtils.GetEmptyReportFilePath()
-            // };
-            // var envMock = new Mock<IEnvironmentVariableProvider>();
-            // envMock.Setup(_ => _.GetEnvironmentVariable(It.IsAny<string>()))
-            //     .Returns((string varName) => environment[varName]);
-            //
-            var environmentInfo = new BitbucketEnvironmentInfo
-            {
-                Workspace = "workspace",
-                RepoSlug = "repo-slug",
-                CommitHash = "f46f058a160a42c68e4b30ee4598cbfc"
-            };
+            var environmentVariableProviderMock = new EnvironmentVariableProviderMock(TestData.EmptyReportFilePath,
+                new Dictionary<string, string>
+                {
+                    ["BITBUCKET_USERNAME"] = "user",
+                    ["BITBUCKET_APP_PASSWORD"] = "password",
+                    ["CREATE_BUILD_STATUS"] = "true"
+                });
 
-            BitbucketClientMock = new BitbucketClientMock(true, true, environmentInfo);
-
-            EnvironmentVariableProvider =
-                new EnvironmentVariableProviderMock(ExampleReports.GetEmptyReportFilePath()).Object;
+            TestPipeRunner = new TestPipeRunner(environmentVariableProviderMock.Object, MessageHandlerMock);
         }
 
         [Then]
         public void It_Should_Send_Report_To_Bitbucket()
         {
-            VerifySendAsyncCalls(Times.Once(), request =>
-                request.RequestUri.PathAndQuery.EndsWith("reports/resharper-inspections") &&
-                request.Method == HttpMethod.Put);
+            MessageHandlerMock.VerifyRequest(request =>
+                request.RequestUri!.PathAndQuery.EndsWith("reports/resharper-inspections") &&
+                request.Method == HttpMethod.Put, Times.Once());
         }
 
         [Then]
         public void It_Should_Not_Send_Annotations_To_Bitbucket()
         {
-            VerifySendAsyncCalls(Times.Never(), request => request.RequestUri.PathAndQuery.Contains("annotations"));
+            MessageHandlerMock.VerifyRequest(
+                request => request.RequestUri!.PathAndQuery.Contains("annotations"),
+                Times.Never());
         }
 
         [Then]
         public void It_Should_Send_Build_Status_To_Bitbucket()
         {
-            VerifySendAsyncCalls(Times.Once(), request => request.RequestUri.PathAndQuery.Contains("statuses/build"));
+            MessageHandlerMock.VerifyRequest(
+                request => request.RequestUri!.PathAndQuery.Contains("statuses/build"),
+                Times.Once());
         }
     }
 }

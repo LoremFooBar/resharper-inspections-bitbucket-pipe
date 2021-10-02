@@ -7,7 +7,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Resharper.CodeInspections.BitbucketPipe.BitbucketApiClient;
 using Resharper.CodeInspections.BitbucketPipe.Model.Bitbucket.Report;
-using Resharper.CodeInspections.BitbucketPipe.Model.ReSharper;
 using Resharper.CodeInspections.BitbucketPipe.ModelCreators;
 using Resharper.CodeInspections.BitbucketPipe.Options;
 using Resharper.CodeInspections.BitbucketPipe.Utils;
@@ -34,7 +33,8 @@ namespace Resharper.CodeInspections.BitbucketPipe
 
             var pipeOptions = serviceProvider.GetRequiredService<IOptions<PipeOptions>>();
             var annotationsCreator = serviceProvider.GetRequiredService<AnnotationsCreator>();
-            var issuesReport = await Report.CreateFromFileAsync(pipeOptions.Value.InspectionsXmlPathOrPattern);
+            var reportCreator = serviceProvider.GetRequiredService<ReSharperReportCreator>();
+            var issuesReport = await reportCreator.CreateFromFileAsync(pipeOptions.Value.InspectionsXmlPathOrPattern);
             var pipelineReport = PipelineReport.CreateFromIssuesReport(issuesReport);
             var annotations = annotationsCreator.CreateAnnotationsFromIssuesReport(issuesReport);
 
@@ -59,8 +59,16 @@ namespace Resharper.CodeInspections.BitbucketPipe
                 _environmentVariableProvider.GetRequiredEnvironmentVariable("INSPECTIONS_XML_PATH");
             Log.Debug("INSPECTIONS_XML_PATH={XmlPath}", inspectionsXmlPathOrPattern);
 
+            bool onlyIssuesInDiff =
+                _environmentVariableProvider.GetEnvironmentVariableOrDefault("INCLUDE_ONLY_ISSUES_IN_DIFF", "false")
+                    .Equals("true", StringComparison.OrdinalIgnoreCase);
+
             var pipeOptions = new PipeOptions
-                {CreateBuildStatus = createBuildStatus, InspectionsXmlPathOrPattern = inspectionsXmlPathOrPattern};
+            {
+                CreateBuildStatus = createBuildStatus,
+                InspectionsXmlPathOrPattern = inspectionsXmlPathOrPattern,
+                IncludeOnlyIssuesInDiff = onlyIssuesInDiff
+            };
 
             SetupBitbucketClient(services, authOptions);
 
@@ -75,11 +83,13 @@ namespace Resharper.CodeInspections.BitbucketPipe
                 .Configure<PipeOptions>(options => {
                     options.CreateBuildStatus = pipeOptions.CreateBuildStatus;
                     options.InspectionsXmlPathOrPattern = pipeOptions.InspectionsXmlPathOrPattern;
+                    options.IncludeOnlyIssuesInDiff = pipeOptions.IncludeOnlyIssuesInDiff;
                 })
                 .AddSingleton(_environmentVariableProvider)
                 .AddSingleton(_pipeEnvironment)
                 .AddSingleton<BitbucketEnvironmentInfo>()
-                .AddSingleton<AnnotationsCreator>();
+                .AddSingleton<AnnotationsCreator>()
+                .AddSingleton<ReSharperReportCreator>();
         }
 
         private void SetupBitbucketClient(IServiceCollection services, BitbucketAuthenticationOptions authOptions)

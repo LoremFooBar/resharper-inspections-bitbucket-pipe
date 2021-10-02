@@ -2,6 +2,12 @@
   "version": 1,
   "dependencies": {
     ".NETCoreApp,Version=v5.0": {
+      "DiffPatch": {
+        "type": "Direct",
+        "requested": "[2.0.0, )",
+        "resolved": "2.0.0",
+        "contentHash": "mbR47t3hnUhJEgK6+/ROC3ekFy8a9SnoZGBk4Qzs7S1BW6YR81mXfW2UM4A2BM6e00hIdJUYyDq+tC+vB+rkzw=="
+      },
       "IdentityModel": {
         "type": "Direct",
         "requested": "[5.1.0, )",

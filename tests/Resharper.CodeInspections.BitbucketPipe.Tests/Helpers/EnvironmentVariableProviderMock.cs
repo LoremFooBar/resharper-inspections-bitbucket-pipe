@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using JetBrains.Annotations;
 using Moq;
@@ -15,7 +16,8 @@ namespace Resharper.CodeInspections.BitbucketPipe.Tests.Helpers
             ["BITBUCKET_WORKSPACE"] = "workspace",
             ["BITBUCKET_REPO_SLUG"] = "repo-slug",
             ["BITBUCKET_COMMIT"] = "f46f058a160a42c68e4b30ee4598cbfc",
-            ["INSPECTIONS_XML_PATH"] = "inspect.xml"
+            ["INSPECTIONS_XML_PATH"] = "inspect.xml",
+            ["BITBUCKET_CLONE_DIR"] = Path.GetTempPath()
         };
 
         public EnvironmentVariableProviderMock([CanBeNull] IReadOnlyDictionary<string, string> environment = null)
@@ -39,8 +41,8 @@ namespace Resharper.CodeInspections.BitbucketPipe.Tests.Helpers
             Object = envMock.Object;
         }
 
-        public EnvironmentVariableProviderMock(string inspectionsFilePath) :
-            this(new Dictionary<string, string>
+        public EnvironmentVariableProviderMock(string inspectionsFilePath, IReadOnlyDictionary<string, string> environment = null) :
+            this(new Dictionary<string, string>(environment ?? new Dictionary<string, string>())
                 {["INSPECTIONS_XML_PATH"] = inspectionsFilePath})
         {
         }

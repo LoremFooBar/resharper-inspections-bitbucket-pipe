@@ -1,0 +1,173 @@
+diff --git a/tests/Resharper.CodeInspections.BitbucketPipe.Tests/ResharperReportTests/When_Creating_Report_From_File_That_Does_Not_Contain_Issues.cs b/tests/Resharper.CodeInspections.BitbucketPipe.Tests/ResharperReportTests/When_Creating_Report_From_File_That_Does_Not_Contain_Issues.cs
+index 19fb7e0..f6bd303 100644
+--- a/tests/Resharper.CodeInspections.BitbucketPipe.Tests/ResharperReportTests/When_Creating_Report_From_File_That_Does_Not_Contain_Issues.cs
++++ b/tests/Resharper.CodeInspections.BitbucketPipe.Tests/ResharperReportTests/When_Creating_Report_From_File_That_Does_Not_Contain_Issues.cs
+@@ -1,8 +1,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Camilyo.DomainManagement.Re
+ EndProject
+ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Camilyo.DomainManagement.Service.Tests", "tests\Camilyo.DomainManagement.Service.Tests\Camilyo.DomainManagement.Service.Tests.csproj", "{97E4CC83-A3BE-4DEC-8FFE-53F1B53BC105}"
+ EndProject
+-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Camilyo.DomainManagement.Tests", "tests\Camilyo.DomainManagement.Tests\Camilyo.DomainManagement.Tests.csproj", "{90AEA8F9-7B93-45E8-A341-3AB459D29B7C}"
+-EndProject
+ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Camilyo.DomainManagement.Contracts", "src\Camilyo.DomainManagement.Contracts\Camilyo.DomainManagement.Contracts.csproj", "{A8F06129-E78E-4507-9555-A13DC39E818C}"
+ EndProject
+ Global
+@@ -54,10 +52,6 @@ Global
+ 		{97E4CC83-A3BE-4DEC-8FFE-53F1B53BC105}.Debug|Any CPU.Build.0 = Debug|Any CPU
+ 		{97E4CC83-A3BE-4DEC-8FFE-53F1B53BC105}.Release|Any CPU.ActiveCfg = Release|Any CPU
+ 		{97E4CC83-A3BE-4DEC-8FFE-53F1B53BC105}.Release|Any CPU.Build.0 = Release|Any CPU
+-		{90AEA8F9-7B93-45E8-A341-3AB459D29B7C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+-		{90AEA8F9-7B93-45E8-A341-3AB459D29B7C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+-		{90AEA8F9-7B93-45E8-A341-3AB459D29B7C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+-		{90AEA8F9-7B93-45E8-A341-3AB459D29B7C}.Release|Any CPU.Build.0 = Release|Any CPU
+ 		{A8F06129-E78E-4507-9555-A13DC39E818C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+ 		{A8F06129-E78E-4507-9555-A13DC39E818C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+ 		{A8F06129-E78E-4507-9555-A13DC39E818C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+@@ -72,7 +66,6 @@ Global
+ 		{193EF513-FB4C-4222-AA88-6C0A20C13267} = {2CB0B901-C90C-4B83-A384-1E0B6D84BEA6}
+ 		{98FB6291-E3CE-4027-AA95-B359391C94E6} = {30EE2DEF-BDB9-4167-9552-9DD84A6971E8}
+ 		{97E4CC83-A3BE-4DEC-8FFE-53F1B53BC105} = {30EE2DEF-BDB9-4167-9552-9DD84A6971E8}
+-		{90AEA8F9-7B93-45E8-A341-3AB459D29B7C} = {30EE2DEF-BDB9-4167-9552-9DD84A6971E8}
+ 		{A8F06129-E78E-4507-9555-A13DC39E818C} = {2CB0B901-C90C-4B83-A384-1E0B6D84BEA6}
+ 	EndGlobalSection
+ 	GlobalSection(ExtensibilityGlobals) = postSolution
+diff --git a/src/Camilyo.DomainManagement.Service/Camilyo.DomainManagement.Service.csproj b/src/Camilyo.DomainManagement.Service/Camilyo.DomainManagement.Service.csproj
+index 1c6e972..ecc34c5 100644
+--- a/src/Camilyo.DomainManagement.Service/Camilyo.DomainManagement.Service.csproj
++++ b/src/Camilyo.DomainManagement.Service/Camilyo.DomainManagement.Service.csproj
+@@ -13,6 +13,7 @@
+         <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
+         <PackageReference Include="Azure.Identity" Version="1.2.3" />
+         <PackageReference Include="Camilyo.Framework.ApplicationInsights" Version="1.0.0" />
++        <PackageReference Include="Camilyo.Framework.Web" Version="0.10.0" />
+         <PackageReference Include="Camilyo.Web.Contracts" Version="1.0.90" />
+         <PackageReference Include="IdentityModel" Version="4.3.1" />
+         <PackageReference Include="JetBrains.Annotations" Version="2020.3.0" />
+@@ -40,8 +41,8 @@
+         <PackageReference Include="Serilog.Sinks.ApplicationInsights" Version="3.1.0" />
+         <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
+         <PackageReference Include="Serilog.Sinks.File" Version="4.1.0" />
+-        <PackageReference Include="Swashbuckle.AspNetCore" Version="5.5.1" />
+-        <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="5.5.1" />
++        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.4" />
++        <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.1.4" />
+     </ItemGroup>
+
+     <ItemGroup>
+diff --git a/src/Camilyo.DomainManagement.Service/Startup.cs b/src/Camilyo.DomainManagement.Service/Startup.cs
+index 99859f4..242b240 100644
+--- a/src/Camilyo.DomainManagement.Service/Startup.cs
++++ b/src/Camilyo.DomainManagement.Service/Startup.cs
+@@ -17,6 +17,7 @@ using Camilyo.DomainManagement.Service.Options;
+ using Camilyo.DomainManagement.Service.Resources;
+ using Camilyo.DomainManagement.Service.Services;
+ using Camilyo.Framework.ApplicationInsights;
++using Camilyo.Framework.Web.Specification;
+ using JsonApiDotNetCore.Configuration;
+ using JsonApiDotNetCore.Services;
+ using Microsoft.ApplicationInsights;
+@@ -173,7 +174,11 @@ namespace Camilyo.DomainManagement.Service
+                             }, new List<string>()
+                         }
+                     });
++
++                setup.ApplyJsonApiSpecification();
++
+             });
++
+         }
+
+         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+diff --git a/src/Camilyo.DomainManagement.Service/packages.lock.json b/src/Camilyo.DomainManagement.Service/packages.lock.json
+File excluded by pattern "packages.lock.json"
+diff --git a/tests/Camilyo.DomainManagement.Registrars.Tests/FakeRegistrarTests/When_Making_Domain_Registration_Request.cs b/tests/Camilyo.DomainManagement.Registrars.Tests/FakeRegistrarTests/When_Making_Domain_Registration_Request.cs
+deleted file mode 100644
+index acd6dff..0000000
+--- a/tests/Camilyo.DomainManagement.Registrars.Tests/FakeRegistrarTests/When_Making_Domain_Registration_Request.cs
++++ /dev/null
+@@ -1,86 +0,0 @@
+-Ã¯Â»Â¿// using System.Threading.Tasks;
+-// using Camilyo.DomainManagement.Registrars.MonoRegistrar;
+-// using Camilyo.Framework.Testing;
+-//
+-// namespace Camilyo.DomainManagement.Registrars.Tests.FakeRegistrarTests
+-// {
+-//     public class When_Making_Domain_Registration_Request: SpecificationBase
+-//     {
+-//     private IRegistrar _fakeRegistrar;
+-//
+-//     protected override void Given()
+-//     {
+-//         base.Given();
+-//         _fakeRegistrar = new FakeRegistrar.FakeRegistrar();
+-//     }
+-//
+-//     protected override async Task WhenAsync()
+-//     {
+-//         await base.WhenAsync();
+-//
+-//         await _fakeRegistrar.Register(CreateFakeValidRequestObject("Camilyo.com"));
+-//         await _fakeRegistrar.Register(CreateFakeValidRequestObject("amazon.com"));
+-//     }
+-//
+-//     [Then]
+-//     public void It_Should_Return_True_For_Valid_Request()
+-//     {
+-//         // Assert.AreEqual(true, _registrationResponse.IsSuccess);
+-//     }
+-//
+-//     [Then]
+-//     public void It_Should_Return_False_When_Request_Is_Missing_Domain_Name()
+-//     {
+-//         // Assert.AreEqual(false, _registrationResponseMissingDomainName.IsSuccess);
+-//     }
+-//
+-//     //TODO add more invalid "Then"s
+-//
+-//     private static RegistrationRequest CreateFakeValidRequestObject(string domain) =>
+-//         new RegistrationRequest(domain)
+-//         {
+-//             ContactSet = new ContactSet
+-//             {
+-//                 Admin = new Contact
+-//                 {
+-//                     FirstName = "John",
+-//                     LastName = "Doe",
+-//                     Email = "john.doe@a.com",
+-//                     Phone = "(718)454-8989",
+-//                     OrgName = "Amazon",
+-//                             Address1 = "123 Park Ave",
+-//                             City = "Brooklyn",
+-//                             State = "New York",
+-//                             Country = "USA",
+-//                             PostalCode = "11213"
+-//                 },
+-//                 Owner = new Contact
+-//                 {
+-//                     FirstName = "John",
+-//                     LastName = "Doe",
+-//                     Email = "john.doe@a.com",
+-//                     Phone = "(718)454-8989",
+-//                     OrgName = "Amazon",
+-//                         Address1 = "123 Park Ave",
+-//                         City = "Brooklyn",
+-//                         State = "New York",
+-//                         Country = "USA",
+-//                         PostalCode = "11213"
+-//                 },
+-//                 Tech = new Contact
+-//                 {
+-//                     FirstName = "John",
+-//                     LastName = "Doe",
+-//                     Email = "john.doe@a.com",
+-//                     Phone = "(718)454-8989",
+-//                     OrgName = "Amazon",
+-//                         Address1 = "123 Park Ave",
+-//                         City = "Brooklyn",
+-//                         State = "New York",
+-//                         Country = "USA",
+-//                         PostalCode = "11213"
+-//                 }
+-//             }
+-//         };
+-//     }
+-// }

@@ -1,43 +1,45 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.Linq;
+using System.Net.Http;
+using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using Resharper.CodeInspections.BitbucketPipe.BitbucketApiClient;
-using Resharper.CodeInspections.BitbucketPipe.Tests.Helpers;
 using Resharper.CodeInspections.BitbucketPipe.Utils;
 
 namespace Resharper.CodeInspections.BitbucketPipe.Tests.PipeRunnerTests
 {
     public class TestPipeRunner : PipeRunner
     {
-        private readonly BitbucketClientMock _bitbucketClientMock;
+        private Action<IServiceCollection> _configureTestServices;
 
-        public TestPipeRunner(BitbucketClientMock bitbucketClientMock,
-            IEnvironmentVariableProvider environmentVariableProvider) : base(environmentVariableProvider) =>
-            _bitbucketClientMock = bitbucketClientMock;
+        public TestPipeRunner([NotNull] IEnvironmentVariableProvider environmentVariableProvider) : base(
+            environmentVariableProvider)
+        {
+        }
+
+        public TestPipeRunner([NotNull] IEnvironmentVariableProvider environmentVariableProvider,
+            [NotNull] Mock<HttpMessageHandler> bitbucketMessageHandler) : this(environmentVariableProvider)
+        {
+            _configureTestServices = services =>
+            {
+                var bitbucketClientDescriptor =
+                    services.First(descriptor => descriptor.ServiceType == typeof(BitbucketClient));
+                services.Remove(bitbucketClientDescriptor);
+
+                services
+                    .AddHttpClient<BitbucketClient>()
+                    .ConfigurePrimaryHttpMessageHandler(() => bitbucketMessageHandler.Object);
+            };
+        }
 
         protected override void ConfigureServices(IServiceCollection services)
         {
             base.ConfigureServices(services);
-
-            // add mock BitbucketClient
-            var bitbucketClientService =
-                services.FirstOrDefault(service => service.ServiceType == typeof(BitbucketClient));
-            services.Remove(bitbucketClientService);
-            services.AddSingleton(_bitbucketClientMock.BitbucketClient);
-
-            var environmentVariableProviderService =
-                services.FirstOrDefault(service => service.ServiceType == typeof(IEnvironmentVariableProvider));
-            services.Remove(environmentVariableProviderService);
-            var environment = new Dictionary<string, string>
-            {
-                ["INSPECTIONS_XML_PATH"] = "inspect.xml"
-            };
-            var envMock = new Mock<IEnvironmentVariableProvider>();
-            envMock.Setup(_ => _.GetEnvironmentVariable(It.IsAny<string>()))
-                .Returns((string varName) => environment[varName]);
-
-            services.AddSingleton(envMock.Object);
+            _configureTestServices?.Invoke(services);
         }
+
+        public void ConfigureTestServices(Action<IServiceCollection> configureTestServices) =>
+            _configureTestServices = configureTestServices;
     }
 }

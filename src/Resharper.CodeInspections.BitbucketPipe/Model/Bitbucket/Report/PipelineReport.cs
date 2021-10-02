@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using JetBrains.Annotations;
+using Resharper.CodeInspections.BitbucketPipe.Model.ReSharper;
 using Resharper.CodeInspections.BitbucketPipe.Utils;
 
 namespace Resharper.CodeInspections.BitbucketPipe.Model.Bitbucket.Report
@@ -25,12 +26,12 @@ namespace Resharper.CodeInspections.BitbucketPipe.Model.Bitbucket.Report
         [JsonIgnore]
         public int TotalIssues { get; set; }
 
-        public static PipelineReport CreateFromIssuesReport(ReSharper.Report issuesReport)
+        public static PipelineReport CreateFromIssuesReport(SimpleReport issuesReport)
         {
             var pipelineReport = new PipelineReport
             {
                 Title = "ReSharper Inspections",
-                Details = PipeUtils.GetFoundIssuesString(issuesReport.TotalIssues, issuesReport.Information.Solution),
+                Details = PipeUtils.GetFoundIssuesString(issuesReport.TotalIssues, issuesReport.Solution),
                 ExternalId = "resharper-inspections",
                 Reporter = "ReSharper",
                 ReportType = ReportType.Bug,

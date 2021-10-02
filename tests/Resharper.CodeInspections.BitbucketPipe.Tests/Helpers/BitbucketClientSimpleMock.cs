@@ -1,42 +1,40 @@
 ﻿using System.Net;
 using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Moq;
-using Moq.Protected;
+using Moq.Contrib.HttpClient;
 using Resharper.CodeInspections.BitbucketPipe.BitbucketApiClient;
 using Resharper.CodeInspections.BitbucketPipe.Options;
 using Resharper.CodeInspections.BitbucketPipe.Utils;
 
 namespace Resharper.CodeInspections.BitbucketPipe.Tests.Helpers
 {
-    public class BitbucketClientMock
+    /// <summary>
+    /// BitbucketClient mock that returns OK for all requests
+    /// </summary>
+    public class BitbucketClientSimpleMock
     {
         public BitbucketClient BitbucketClient { get; }
         public Mock<HttpMessageHandler> HttpMessageHandlerMock { get; }
 
-        public BitbucketClientMock(bool useAuthentication, bool createBuildStatus,
+        public BitbucketClientSimpleMock(bool useAuthentication, bool createBuildStatus,
             BitbucketEnvironmentInfo environmentInfo)
         {
             HttpMessageHandlerMock = new Mock<HttpMessageHandler>();
-            HttpMessageHandlerMock
-                .Protected()
-                .Setup<Task<HttpResponseMessage>>("SendAsync",
-                    ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
-                .Returns(Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK)));
+            var httpClient = HttpMessageHandlerMock.CreateClient();
 
-            var httpClient = new HttpClient(HttpMessageHandlerMock.Object);
+            HttpMessageHandlerMock
+                .SetupAnyRequest()
+                .ReturnsResponse(HttpStatusCode.OK);
 
             var authOptionsPoco = useAuthentication
                 ? new BitbucketAuthenticationOptions {Username = "user", AppPassword = "pass"}
                 : new BitbucketAuthenticationOptions {Username = "", AppPassword = ""};
+            var authOptions = new OptionsWrapper<BitbucketAuthenticationOptions>(authOptionsPoco);
 
             var pipeOptionsPoco = new PipeOptions {CreateBuildStatus = createBuildStatus};
-
-            var authOptions = Mock.Of<IOptions<BitbucketAuthenticationOptions>>(_ => _.Value == authOptionsPoco);
-            var pipeOptions = Mock.Of<IOptions<PipeOptions>>(_ => _.Value == pipeOptionsPoco);
+            var pipeOptions = new OptionsWrapper<PipeOptions>(pipeOptionsPoco);
 
             BitbucketClient =
                 new BitbucketClient(httpClient, authOptions, pipeOptions, environmentInfo,
