@@ -16,18 +16,20 @@ script:
       # BITBUCKET_USERNAME: "<string>" # Optional
       # BITBUCKET_APP_PASSWORD: "<string>" # Optional
       # CREATE_BUILD_STATUS: "<boolean>" # Optional, default "true"
+      # INCLUDE_ONLY_ISSUES_IN_DIFF: "<boolean>" # Optional, default "false"
       # DEBUG: "<boolean>" # Optional
 ```
 
 ## Variables
 
-| Variable                  | Usage |
-| ------------------------- | ----- |
-| INSPECTIONS_XML_PATH (\*) | Path to inspections xml file, relative to current directory. You can use patterns that <br/> are supported by [DirectoryInfo.GetFiles](https://docs.microsoft.com/en-us/dotnet/api/system.io.directoryinfo.getfiles). |
-| BITBUCKET_USERNAME        | Bitbucket username, required to create build status. Note, that this should be an account name, not the email. |
-| BITBUCKET_APP_PASSWORD    | Bitbucket app password, required to create build status. |
-| CREATE_BUILD_STATUS       | Whether to create build status reflecting the results of the report. Default: `true`. |
-| DEBUG                     | Turn on extra debug information. Default: `false`. |
+| Variable                    | Usage |
+| --------------------------- | ----- |
+| INSPECTIONS_XML_PATH (\*)   | Path to inspections xml file, relative to current directory. You can use patterns that <br/> are supported by [DirectoryInfo.GetFiles](https://docs.microsoft.com/en-us/dotnet/api/system.io.directoryinfo.getfiles). |
+| BITBUCKET_USERNAME          | Bitbucket username, required to create build status. Note, that this should be an account name, not the email. |
+| BITBUCKET_APP_PASSWORD      | Bitbucket app password, required to create build status. |
+| CREATE_BUILD_STATUS         | Whether to create build status reflecting the results of the report. Default: `true`. |
+| INCLUDE_ONLY_ISSUES_IN_DIFF | Whether to include only issues found in changes of current PR/commit. Default: `false`. |
+| DEBUG                       | Turn on extra debug information. Default: `false`. |
 
 _(\*) = required variable._
 
@@ -37,8 +39,7 @@ _(\*) = required variable._
 
 You need to create the inspections XML file before calling the pipe. To create
 the inspections XML file see
-[InspectCode Command-Line Tool](https://www.jetbrains.com/help/resharper/InspectCode.html)
-.
+[InspectCode Command-Line Tool](https://www.jetbrains.com/help/resharper/InspectCode.html).
 
 ### App Password Required for Build Status
 
@@ -73,18 +74,18 @@ With app password (you should use secure variables for username and app password
 script:
   - pipe: docker://lazyboy1/resharper-inspections-bitbucket-pipe:0.3
     variables:
-      INSPECTIONS_XML_PATH: "src/*/inspect.xml"
+      INSPECTIONS_XML_PATH: "inspect.xml"
       BITBUCKET_USERNAME: $USERNAME
       BITBUCKET_APP_PASSWORD: $APP_PASSWORD
 ```
 
-Temporarily disable build status creation:
+With build status creation disabled:
 
 ```yaml
 script:
   - pipe: docker://lazyboy1/resharper-inspections-bitbucket-pipe:0.3
     variables:
-      INSPECTIONS_XML_PATH: "src/*/inspect.xml"
+      INSPECTIONS_XML_PATH: "inspect.xml"
       BITBUCKET_USERNAME: $USERNAME
       BITBUCKET_APP_PASSWORD: $APP_PASSWORD
       CREATE_BUILD_STATUS: "false"
