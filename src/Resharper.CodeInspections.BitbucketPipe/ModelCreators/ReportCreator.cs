@@ -83,8 +83,13 @@ namespace Resharper.CodeInspections.BitbucketPipe.ModelCreators
                 return issues;
             }
 
+            _logger.LogDebug("filtering issues by changes in PR/commit. Total issues: {TotalIssues}", issues.Count);
+
             var codeChanges = await _bitbucketClient.GetCodeChangesAsync();
             var filteredIssues = issues.Where(issue => IsIssueInChanges(issue, codeChanges)).ToList();
+
+            _logger.LogDebug("Total issues after filter: {TotalFilteredIssues}", filteredIssues.Count);
+
             return filteredIssues;
 
             static bool IsIssueInChanges(Issue issue, IReadOnlyDictionary<string, List<ChunkRange>> codeChanges) =>
