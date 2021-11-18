@@ -13,7 +13,7 @@
             RepoSlug = environmentVariableProvider.GetRequiredEnvironmentVariable("BITBUCKET_REPO_SLUG");
             CloneDir = environmentVariableProvider.GetRequiredEnvironmentVariable("BITBUCKET_CLONE_DIR");
 
-            PullRequestId = environmentVariableProvider.GetEnvironmentVariable("PULL_REQUEST_ID");
+            PullRequestId = environmentVariableProvider.GetEnvironmentVariable("BITBUCKET_PR_ID");
             IsPullRequest = !string.IsNullOrEmpty(PullRequestId);
         }
 
