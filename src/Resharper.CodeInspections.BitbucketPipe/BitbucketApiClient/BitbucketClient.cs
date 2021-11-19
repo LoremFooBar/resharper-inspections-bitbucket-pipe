@@ -5,7 +5,6 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Threading.Tasks;
-using IdentityModel.Client;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Resharper.CodeInspections.BitbucketPipe.Options;
@@ -44,10 +43,6 @@ namespace Resharper.CodeInspections.BitbucketPipe.BitbucketApiClient
                 new Uri(
                     $"{baseUriScheme}://api.bitbucket.org/2.0/repositories/" +
                     $"{_bitbucketEnvironmentInfo.Workspace}/{_bitbucketEnvironmentInfo.RepoSlug}/");
-            if (_authOptions.UseAuthentication) {
-                _logger.LogDebug("Authenticating using app password");
-                _httpClient.SetBasicAuthentication(_authOptions.Username, _authOptions.AppPassword);
-            }
         }
 
         private static string Serialize(object obj)
