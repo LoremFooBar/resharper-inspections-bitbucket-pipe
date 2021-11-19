@@ -52,7 +52,7 @@ namespace Resharper.CodeInspections.BitbucketPipe.Tests.ReportCreatorTests
 
         protected override async Task WhenAsync()
         {
-            _report = await _reSharperReportCreator.CreateFromFileAsync(TestData.NonEmptyReportFilePath);
+            _report = await _reSharperReportCreator.CreateFromFileAsync(TestData.NonEmptyReportForDiffFilePath);
         }
 
         [Then]
@@ -67,7 +67,7 @@ namespace Resharper.CodeInspections.BitbucketPipe.Tests.ReportCreatorTests
             _report.Issues.Should()
                 .NotBeNull()
                 .And.HaveCount(3)
-                .And.OnlyContain(issue => issue.Line >=1 && issue.Line <= 6);
+                .And.OnlyContain(issue => issue.Line == 20 || issue.Line == 44 || issue.Line == 45);
         }
     }
 }

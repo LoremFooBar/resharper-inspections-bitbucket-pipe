@@ -32,8 +32,4 @@
     <None Remove="example-inspect.xml" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Model\Diff" />
-  </ItemGroup>
-
 </Project>

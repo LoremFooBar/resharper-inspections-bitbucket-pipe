@@ -9,9 +9,11 @@ namespace Resharper.CodeInspections.BitbucketPipe.Tests.Helpers
         public static string NonEmptyReportFilePath { get; } =
             Path.Combine(TestDataDirectoryName, "report-with-issues.xml");
 
-
         public static string EmptyReportFilePath { get; } =
             Path.Combine(TestDataDirectoryName, "report-without-issues.xml");
+
+        public static  string NonEmptyReportForDiffFilePath { get; } =
+            Path.Combine(TestDataDirectoryName, "report-with-issues-for-diff.xml");
 
         /// <summary>
         /// this diff should produce changes

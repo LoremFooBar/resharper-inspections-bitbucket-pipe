@@ -21,13 +21,14 @@ namespace Resharper.CodeInspections.BitbucketPipe.Tests.PipeRunnerTests
                     request.Method == HttpMethod.Get && request.RequestUri!.PathAndQuery.Contains("/diff"))
                 .ReturnsResponse(TestData.DiffText, "text/plain");
 
-            var environmentVariableProviderMock = new EnvironmentVariableProviderMock(TestData.NonEmptyReportFilePath,
+            var environmentVariableProviderMock = new EnvironmentVariableProviderMock(
+                TestData.NonEmptyReportForDiffFilePath,
                 new Dictionary<string, string>
                 {
                     ["INCLUDE_ONLY_ISSUES_IN_DIFF"] = "true"
                 });
 
-            TestPipeRunner = new TestPipeRunner(environmentVariableProviderMock.Object , MessageHandlerMock);
+            TestPipeRunner = new TestPipeRunner(environmentVariableProviderMock.Object, MessageHandlerMock);
         }
 
         [Then]

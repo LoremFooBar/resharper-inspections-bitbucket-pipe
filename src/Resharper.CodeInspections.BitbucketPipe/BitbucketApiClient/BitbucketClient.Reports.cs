@@ -14,7 +14,6 @@ namespace Resharper.CodeInspections.BitbucketPipe.BitbucketApiClient
         {
             string serializedReport = Serialize(report);
 
-            _logger.LogDebug("Sending request: PUT reports/{ExternalId}", report.ExternalId);
             _logger.LogDebug("Sending report: {Report}", serializedReport);
 
             var response = await _httpClient.PutAsync(

@@ -5,10 +5,10 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
-using DiffPatch.Data;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Resharper.CodeInspections.BitbucketPipe.BitbucketApiClient;
+using Resharper.CodeInspections.BitbucketPipe.Model.Diff;
 using Resharper.CodeInspections.BitbucketPipe.Model.ReSharper;
 using Resharper.CodeInspections.BitbucketPipe.Options;
 
@@ -92,10 +92,9 @@ namespace Resharper.CodeInspections.BitbucketPipe.ModelCreators
 
             return filteredIssues;
 
-            static bool IsIssueInChanges(Issue issue, IReadOnlyDictionary<string, List<ChunkRange>> codeChanges) =>
+            static bool IsIssueInChanges(Issue issue, IReadOnlyDictionary<string, AddedLinesInFile> codeChanges) =>
                 codeChanges.ContainsKey(issue.File) &&
-                codeChanges[issue.File].Any(range =>
-                    issue.Line >= range.StartLine && issue.Line <= range.StartLine + range.LineCount - 1);
+                codeChanges[issue.File].LinesAdded.Any(addedLineNum => issue.Line == addedLineNum);
         }
     }
 }
