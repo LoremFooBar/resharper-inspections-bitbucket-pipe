@@ -16,20 +16,20 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="DiffPatch" Version="2.0.0" />
-    <PackageReference Include="IdentityModel" Version="6.0.0" />
-    <PackageReference Include="JetBrains.Annotations" Version="2021.3.0" />
-    <PackageReference Include="Macross.Json.Extensions" Version="2.2.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="6.0.0" />
-    <PackageReference Include="Serilog.Extensions.Logging" Version="3.1.0" />
-    <PackageReference Include="Serilog.Sinks.Console" Version="4.0.1" />
+    <PackageReference Include="DiffPatch" Version="2.0.0"/>
+    <PackageReference Include="IdentityModel" Version="6.0.0"/>
+    <PackageReference Include="JetBrains.Annotations" Version="2021.3.0"/>
+    <PackageReference Include="Macross.Json.Extensions" Version="2.2.0"/>
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0"/>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0"/>
+    <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0"/>
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="6.0.0"/>
+    <PackageReference Include="Serilog.Extensions.Logging" Version="3.1.0"/>
+    <PackageReference Include="Serilog.Sinks.Console" Version="4.0.1"/>
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="example-inspect.xml" />
+    <None Remove="example-inspect.xml"/>
   </ItemGroup>
 
 </Project>

@@ -8,16 +8,32 @@
     </InspectionScope>
   </Information>
   <IssueTypes>
-    <IssueType Id="CheckNamespace" Category="Constraints Violations" CategoryId="ConstraintViolation" Description="Namespace does not correspond to file location" Severity="WARNING" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=CheckNamespace" />
-    <IssueType Id="RedundantUsingDirective" Category="Redundancies in Code" CategoryId="CodeRedundancy" Description="Redundant using directive" Severity="WARNING" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=RedundantUsingDirective" />
-    <IssueType Id="UnusedType.Global" Category="Redundancies in Symbol Declarations" CategoryId="DeclarationRedundancy" SubCategory="Type is never used" Description="Type is never used: Non-private accessibility" Severity="WARNING" Global="True" WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=UnusedType.Global" />
+    <IssueType Id="CheckNamespace" Category="Constraints Violations" CategoryId="ConstraintViolation"
+               Description="Namespace does not correspond to file location" Severity="WARNING"
+               WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=CheckNamespace"/>
+    <IssueType Id="RedundantUsingDirective" Category="Redundancies in Code" CategoryId="CodeRedundancy"
+               Description="Redundant using directive" Severity="WARNING"
+               WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=RedundantUsingDirective"/>
+    <IssueType Id="UnusedType.Global" Category="Redundancies in Symbol Declarations" CategoryId="DeclarationRedundancy"
+               SubCategory="Type is never used" Description="Type is never used: Non-private accessibility"
+               Severity="WARNING" Global="True"
+               WikiUrl="https://www.jetbrains.com/resharperplatform/help?Keyword=UnusedType.Global"/>
   </IssueTypes>
   <Issues>
     <Project Name="Resharper.CodeInspections.BitbucketPipe.Tests">
-      <Issue TypeId="RedundantUsingDirective" File="tests\Resharper.CodeInspections.BitbucketPipe.Tests\ResharperReportTests\When_Creating_Report_From_File_That_Does_Not_Contain_Issues.cs" Offset="0-78" Message="Using directive is not required by the code and can be safely removed" />
-      <Issue TypeId="RedundantUsingDirective" File="tests\Resharper.CodeInspections.BitbucketPipe.Tests\ResharperReportTests\When_Creating_Report_From_File_That_Does_Not_Contain_Issues.cs" Offset="80-142" Line="2" Message="Using directive is not required by the code and can be safely removed" />
-      <Issue TypeId="CheckNamespace" File="tests\Resharper.CodeInspections.BitbucketPipe.Tests\ResharperReportTests\When_Creating_Report_From_File_That_Does_Not_Contain_Issues.cs" Offset="214-284" Line="5" Message="Namespace does not correspond to file location, should be: 'Resharper.CodeInspections.BitbucketPipe.Tests.ResharperReportTests'" />
-      <Issue TypeId="UnusedType.Global" File="tests\Resharper.CodeInspections.BitbucketPipe.Tests\ResharperReportTests\When_Creating_Report_From_File_That_Does_Not_Contain_Issues.cs" Offset="306-349" Line="7" Message="Class 'When_Creating_Annotations_From_Empty_Report' is never used" />
+      <Issue TypeId="RedundantUsingDirective"
+             File="tests\Resharper.CodeInspections.BitbucketPipe.Tests\ResharperReportTests\When_Creating_Report_From_File_That_Does_Not_Contain_Issues.cs"
+             Offset="0-78" Message="Using directive is not required by the code and can be safely removed"/>
+      <Issue TypeId="RedundantUsingDirective"
+             File="tests\Resharper.CodeInspections.BitbucketPipe.Tests\ResharperReportTests\When_Creating_Report_From_File_That_Does_Not_Contain_Issues.cs"
+             Offset="80-142" Line="2" Message="Using directive is not required by the code and can be safely removed"/>
+      <Issue TypeId="CheckNamespace"
+             File="tests\Resharper.CodeInspections.BitbucketPipe.Tests\ResharperReportTests\When_Creating_Report_From_File_That_Does_Not_Contain_Issues.cs"
+             Offset="214-284" Line="5"
+             Message="Namespace does not correspond to file location, should be: 'Resharper.CodeInspections.BitbucketPipe.Tests.ResharperReportTests'"/>
+      <Issue TypeId="UnusedType.Global"
+             File="tests\Resharper.CodeInspections.BitbucketPipe.Tests\ResharperReportTests\When_Creating_Report_From_File_That_Does_Not_Contain_Issues.cs"
+             Offset="306-349" Line="7" Message="Class 'When_Creating_Annotations_From_Empty_Report' is never used"/>
     </Project>
   </Issues>
 </Report>

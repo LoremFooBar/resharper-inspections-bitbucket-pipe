@@ -1,18 +1,14 @@
 ﻿using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
 
-namespace Resharper.CodeInspections.BitbucketPipe.Model.Bitbucket.Report
+namespace Resharper.CodeInspections.BitbucketPipe.Model.Bitbucket.Report;
+
+[JsonConverter(typeof(JsonStringEnumMemberConverter))]
+public enum Result
 {
-    [JsonConverter(typeof(JsonStringEnumMemberConverter))]
-    public enum Result
-    {
-        [EnumMember(Value = "PASSED")]
-        Passed,
+    [EnumMember(Value = "PASSED")] Passed,
 
-        [EnumMember(Value = "FAILED")]
-        Failed,
+    [EnumMember(Value = "FAILED")] Failed,
 
-        [EnumMember(Value = "PENDING")]
-        Pending
-    }
+    [EnumMember(Value = "PENDING")] Pending,
 }

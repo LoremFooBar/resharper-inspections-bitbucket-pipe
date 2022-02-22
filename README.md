@@ -39,20 +39,21 @@ _(\*) = required variable._
 
 You need to create the inspections XML file before calling the pipe. To create
 the inspections XML file see
-[InspectCode Command-Line Tool](https://www.jetbrains.com/help/resharper/InspectCode.html).
+[InspectCode Command-Line Tool](https://www.jetbrains.com/help/resharper/InspectCode.html)
+.
 
 ### App Password
 
 App password is required for 2 pipe features:
 
-1. Create build status when `CREATE_BUILD_STATUS="true"`.
-   Required permission: Repositories - Read.
-2. Get diff (`INCLUDE_ONLY_ISSUES_IN_DIFF="true"` when in PRs).
-   Required permission: Pull requests - Read.
+1. Create build status when `CREATE_BUILD_STATUS="true"`. Required permission:
+   Repositories - Read.
+2. Get diff (`INCLUDE_ONLY_ISSUES_IN_DIFF="true"` when in PRs). Required
+   permission: Pull requests - Read.
 
 See Atlassian documentation on how to
-[generate an app password](https://confluence.atlassian.com/bitbucket/app-passwords-828781300.html).
-
+[generate an app password](https://confluence.atlassian.com/bitbucket/app-passwords-828781300.html)
+.
 
 ## Examples
 
@@ -74,7 +75,8 @@ script:
       INSPECTIONS_XML_PATH: "src/*/inspect.xml"
 ```
 
-With app password (you should use secure variables for username and app password):
+With app password (you should use secure variables for username and app
+password):
 
 ```yaml
 script:

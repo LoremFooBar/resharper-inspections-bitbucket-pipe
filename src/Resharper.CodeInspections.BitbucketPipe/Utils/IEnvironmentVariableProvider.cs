@@ -1,14 +1,13 @@
-﻿namespace Resharper.CodeInspections.BitbucketPipe.Utils
+﻿namespace Resharper.CodeInspections.BitbucketPipe.Utils;
+
+public interface IEnvironmentVariableProvider
 {
-    public interface IEnvironmentVariableProvider
-    {
-        string? GetEnvironmentVariable(string variableName);
+    string? GetEnvironmentVariable(string variableName);
 
-        string GetRequiredEnvironmentVariable(string variableName) =>
-            GetEnvironmentVariable(variableName) ??
-            throw new RequiredEnvironmentVariableNotFoundException(variableName);
+    string GetRequiredEnvironmentVariable(string variableName) =>
+        GetEnvironmentVariable(variableName) ??
+        throw new RequiredEnvironmentVariableNotFoundException(variableName);
 
-        string GetEnvironmentVariableOrDefault(string variableName, string defaultValue) =>
-            GetEnvironmentVariable(variableName) ?? defaultValue;
-    }
+    string GetEnvironmentVariableOrDefault(string variableName, string defaultValue) =>
+        GetEnvironmentVariable(variableName) ?? defaultValue;
 }

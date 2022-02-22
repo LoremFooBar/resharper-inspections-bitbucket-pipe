@@ -4,23 +4,22 @@ using Resharper.CodeInspections.BitbucketPipe.Tests.BDD;
 using Resharper.CodeInspections.BitbucketPipe.Tests.Helpers;
 using Resharper.CodeInspections.BitbucketPipe.Utils;
 
-namespace Resharper.CodeInspections.BitbucketPipe.Tests.BitbucketClientTests
+namespace Resharper.CodeInspections.BitbucketPipe.Tests.BitbucketClientTests;
+
+public class BitbucketClientSpecificationBase : SpecificationBase
 {
-    public class BitbucketClientSpecificationBase : SpecificationBase
+    private BitbucketClientSimpleMock BitbucketClientMock { get; set; }
+    protected BitbucketClient BitbucketClient => BitbucketClientMock.BitbucketClient;
+    protected Mock<HttpMessageHandler> HttpMessageHandlerMock => BitbucketClientMock.HttpMessageHandlerMock;
+    protected virtual bool UseAuthentication => true;
+    protected virtual bool CreateBuildStatus => true;
+
+    protected override void Given()
     {
-        private BitbucketClientSimpleMock BitbucketClientMock { get; set; }
-        protected BitbucketClient BitbucketClient => BitbucketClientMock.BitbucketClient;
-        protected Mock<HttpMessageHandler> HttpMessageHandlerMock => BitbucketClientMock.HttpMessageHandlerMock;
-        protected virtual bool UseAuthentication => true;
-        protected virtual bool CreateBuildStatus => true;
+        base.Given();
 
-        protected override void Given()
-        {
-            base.Given();
-
-            var environmentInfo = new BitbucketEnvironmentInfo
-                {Workspace = "workspace", RepoSlug = "repo-slug", CommitHash = "f46f058a160a42c68e4b30ee4598cbfc"};
-            BitbucketClientMock = new BitbucketClientSimpleMock(UseAuthentication, CreateBuildStatus, environmentInfo);
-        }
+        var environmentInfo = new BitbucketEnvironmentInfo
+            { Workspace = "workspace", RepoSlug = "repo-slug", CommitHash = "f46f058a160a42c68e4b30ee4598cbfc" };
+        BitbucketClientMock = new BitbucketClientSimpleMock(UseAuthentication, CreateBuildStatus, environmentInfo);
     }
 }
