@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using Resharper.CodeInspections.BitbucketPipe.Model.Bitbucket.CodeAnnotations;
+﻿using Resharper.CodeInspections.BitbucketPipe.Model.Bitbucket.CodeAnnotations;
 using Resharper.CodeInspections.BitbucketPipe.Model.ReSharper;
 using Resharper.CodeInspections.BitbucketPipe.Utils;
 using Serilog;

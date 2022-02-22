@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
 using Moq;
 using Resharper.CodeInspections.BitbucketPipe.Utils;
 

@@ -1,6 +1,4 @@
-﻿using System.IO;
-
-namespace Resharper.CodeInspections.BitbucketPipe.Tests.Helpers
+﻿namespace Resharper.CodeInspections.BitbucketPipe.Tests.Helpers
 {
     public static class TestData
     {

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Net.Http;
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using Resharper.CodeInspections.BitbucketPipe.BitbucketApiClient;

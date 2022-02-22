@@ -4,7 +4,6 @@
 // Source: https://github.com/dotnet/corefx/pull/40003
 // See also: https://github.com/dotnet/runtime/issues/782
 
-using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Text.Json;

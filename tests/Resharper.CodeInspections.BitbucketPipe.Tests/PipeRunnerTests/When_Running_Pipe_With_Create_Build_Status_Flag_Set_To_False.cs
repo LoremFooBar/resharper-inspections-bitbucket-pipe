@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Moq;
+﻿using Moq;
 using Moq.Contrib.HttpClient;
 using Resharper.CodeInspections.BitbucketPipe.Tests.BDD;
 using Resharper.CodeInspections.BitbucketPipe.Tests.Helpers;

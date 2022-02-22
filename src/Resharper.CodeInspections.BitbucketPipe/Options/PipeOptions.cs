@@ -1,6 +1,4 @@
-﻿using System.IO;
-
-namespace Resharper.CodeInspections.BitbucketPipe.Options
+﻿namespace Resharper.CodeInspections.BitbucketPipe.Options
 {
     public class PipeOptions
     {

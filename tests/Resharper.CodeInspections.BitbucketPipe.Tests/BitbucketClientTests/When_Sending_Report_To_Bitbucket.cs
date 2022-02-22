@@ -1,8 +1,4 @@
-﻿using System.Linq;
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
-using Moq;
+﻿using Moq;
 using Moq.Protected;
 using Resharper.CodeInspections.BitbucketPipe.Model.Bitbucket.CodeAnnotations;
 using Resharper.CodeInspections.BitbucketPipe.Model.Bitbucket.Report;

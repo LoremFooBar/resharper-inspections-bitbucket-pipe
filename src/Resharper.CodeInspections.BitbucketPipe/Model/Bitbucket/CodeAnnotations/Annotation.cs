@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Resharper.CodeInspections.BitbucketPipe.Model.Bitbucket.CodeAnnotations
+﻿namespace Resharper.CodeInspections.BitbucketPipe.Model.Bitbucket.CodeAnnotations
 {
     [Serializable]
     public class Annotation

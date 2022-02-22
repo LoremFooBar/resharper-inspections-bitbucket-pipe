@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Resharper.CodeInspections.BitbucketPipe.Utils
+﻿namespace Resharper.CodeInspections.BitbucketPipe.Utils
 {
     public class PipeEnvironment
     {

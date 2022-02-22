@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Web;
+﻿using System.Web;
 using Microsoft.Extensions.Logging;
 using Resharper.CodeInspections.BitbucketPipe.Model.Bitbucket.CodeAnnotations;
 using Resharper.CodeInspections.BitbucketPipe.Model.Bitbucket.Report;

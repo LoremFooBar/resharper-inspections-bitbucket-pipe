@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Resharper.CodeInspections.BitbucketPipe
+﻿namespace Resharper.CodeInspections.BitbucketPipe
 {
     public class RequiredEnvironmentVariableNotFoundException : Exception
     {

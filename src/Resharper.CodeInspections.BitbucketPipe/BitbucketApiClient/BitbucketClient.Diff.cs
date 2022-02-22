@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
+﻿using System.Net;
 using DiffPatch;
 using Microsoft.Extensions.Logging;
 using Resharper.CodeInspections.BitbucketPipe.Model.Diff;

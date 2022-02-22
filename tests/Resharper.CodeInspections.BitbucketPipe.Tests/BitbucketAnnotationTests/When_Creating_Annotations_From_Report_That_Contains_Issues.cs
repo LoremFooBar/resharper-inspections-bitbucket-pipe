@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using FluentAssertions;
-using Microsoft.Extensions.Logging.Abstractions;
+﻿using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Resharper.CodeInspections.BitbucketPipe.Model.Bitbucket.CodeAnnotations;
 using Resharper.CodeInspections.BitbucketPipe.Model.ReSharper;

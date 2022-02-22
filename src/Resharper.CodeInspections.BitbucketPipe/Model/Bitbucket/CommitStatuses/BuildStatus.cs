@@ -1,5 +1,4 @@
-﻿using System;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 using JetBrains.Annotations;
 using Resharper.CodeInspections.BitbucketPipe.Model.Bitbucket.Report;
 using Resharper.CodeInspections.BitbucketPipe.Utils;

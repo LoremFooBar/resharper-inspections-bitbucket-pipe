@@ -1,10 +1,8 @@
-﻿using System;
-using System.Net.Http;
-using System.Net.Http.Headers;
+﻿using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
-using System.Threading.Tasks;
+using System.Text.Json.Serialization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Resharper.CodeInspections.BitbucketPipe.Options;
@@ -50,7 +48,7 @@ namespace Resharper.CodeInspections.BitbucketPipe.BitbucketApiClient
             var jsonSerializerOptions = new JsonSerializerOptions
             {
                 PropertyNamingPolicy = new JsonSnakeCaseNamingPolicy(),
-                IgnoreNullValues = true,
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
                 Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
             };
             return JsonSerializer.Serialize(obj, jsonSerializerOptions);

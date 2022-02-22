@@ -1,4 +1,4 @@
-﻿FROM mcr.microsoft.com/dotnet/sdk:5.0 as build
+﻿FROM mcr.microsoft.com/dotnet/sdk:6.0 as build
 
 LABEL maintainer="@lazyboy1"
 
@@ -6,16 +6,17 @@ ARG ProjectName=Resharper.CodeInspections.BitbucketPipe
 
 WORKDIR /source
 
+COPY Directory.Build.props .
 COPY src/Resharper.CodeInspections.BitbucketPipe/Resharper.CodeInspections.BitbucketPipe.csproj .
 
 RUN dotnet restore
 
 COPY src/$ProjectName/. ./
 
-RUN dotnet publish -c release -o /app
+RUN dotnet publish -c Release -o /app
 
 
-FROM mcr.microsoft.com/dotnet/runtime:5.0 as runtime
+FROM mcr.microsoft.com/dotnet/runtime:6.0 as runtime
 
 WORKDIR /app
 

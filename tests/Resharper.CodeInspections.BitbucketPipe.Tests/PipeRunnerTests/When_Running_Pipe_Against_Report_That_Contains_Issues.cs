@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Net.Http;
-using System.Net.Http.Json;
+﻿using System.Net.Http.Json;
 using Moq;
 using Moq.Contrib.HttpClient;
 using Resharper.CodeInspections.BitbucketPipe.Model.Bitbucket.CodeAnnotations;

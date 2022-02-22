@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 
 namespace Resharper.CodeInspections.BitbucketPipe.Model.Bitbucket.Report
 {

@@ -1,6 +1,4 @@
-﻿using System;
-using FluentAssertions;
-using Moq;
+﻿using Moq;
 using Resharper.CodeInspections.BitbucketPipe.Tests.BDD;
 using Resharper.CodeInspections.BitbucketPipe.Utils;
 

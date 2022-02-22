@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-using FluentAssertions;
-using Microsoft.Extensions.Logging.Abstractions;
+﻿using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Resharper.CodeInspections.BitbucketPipe.Model.Bitbucket.Report;
 using Resharper.CodeInspections.BitbucketPipe.ModelCreators;
