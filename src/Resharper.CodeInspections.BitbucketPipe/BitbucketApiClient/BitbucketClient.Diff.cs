@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.Diagnostics;
+using System.Net;
 using DiffPatch;
 using Microsoft.Extensions.Logging;
 using Resharper.CodeInspections.BitbucketPipe.Model.Diff;
@@ -20,7 +21,8 @@ public partial class BitbucketClient
         // this happens due to credentials not being forward on redirect
         // https://docs.microsoft.com/en-us/dotnet/api/system.net.http.httpclienthandler.allowautoredirect?view=net-6.0#remarks
         if (response.StatusCode is HttpStatusCode.Forbidden or HttpStatusCode.Unauthorized) {
-            var response2 = await _httpClient.GetAsync(response.RequestMessage!.RequestUri);
+            Debug.Assert(response.RequestMessage != null, "response.RequestMessage != null");
+            var response2 = await _httpClient.GetAsync(response.RequestMessage.RequestUri);
             await VerifyResponseAsync(response2);
             diffStr = await response2.Content.ReadAsStringAsync();
         }

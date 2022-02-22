@@ -6,7 +6,7 @@ namespace Resharper.CodeInspections.BitbucketPipe.Tests.Helpers;
 
 public class EnvironmentVariableProviderMock
 {
-    public EnvironmentVariableProviderMock([CanBeNull] IReadOnlyDictionary<string, string> environment = null)
+    private EnvironmentVariableProviderMock([CanBeNull] IReadOnlyDictionary<string, string> environment = null)
     {
         Dictionary<string, string> unionEnv;
 

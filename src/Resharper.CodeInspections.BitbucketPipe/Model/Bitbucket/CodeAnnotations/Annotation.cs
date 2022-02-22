@@ -1,6 +1,9 @@
-﻿namespace Resharper.CodeInspections.BitbucketPipe.Model.Bitbucket.CodeAnnotations;
+﻿using JetBrains.Annotations;
+
+namespace Resharper.CodeInspections.BitbucketPipe.Model.Bitbucket.CodeAnnotations;
 
 [Serializable]
+[PublicAPI]
 public class Annotation
 {
     public string? ExternalId { get; set; }

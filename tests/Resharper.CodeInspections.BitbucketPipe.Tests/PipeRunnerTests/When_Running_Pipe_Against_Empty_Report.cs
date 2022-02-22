@@ -26,7 +26,7 @@ public class When_Running_Pipe_Against_Empty_Report : PipeRunnerSpecificationBas
     public void It_Should_Send_Report_To_Bitbucket()
     {
         MessageHandlerMock.VerifyRequest(request =>
-            request.RequestUri!.PathAndQuery.EndsWith("reports/resharper-inspections") &&
+            request.RequestUri!.PathAndQuery.EndsWith("reports/resharper-inspections", StringComparison.Ordinal) &&
             request.Method == HttpMethod.Put, Times.Once());
     }
 

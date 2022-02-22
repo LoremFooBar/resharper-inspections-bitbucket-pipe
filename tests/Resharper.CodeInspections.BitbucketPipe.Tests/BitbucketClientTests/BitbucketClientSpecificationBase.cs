@@ -12,7 +12,7 @@ public class BitbucketClientSpecificationBase : SpecificationBase
     protected BitbucketClient BitbucketClient => BitbucketClientMock.BitbucketClient;
     protected Mock<HttpMessageHandler> HttpMessageHandlerMock => BitbucketClientMock.HttpMessageHandlerMock;
     protected virtual bool UseAuthentication => true;
-    protected virtual bool CreateBuildStatus => true;
+    private static bool CreateBuildStatus => true;
 
     protected override void Given()
     {

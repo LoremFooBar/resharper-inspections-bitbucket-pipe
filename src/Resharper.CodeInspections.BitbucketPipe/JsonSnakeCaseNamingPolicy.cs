@@ -4,6 +4,8 @@
 // Source: https://github.com/dotnet/corefx/pull/40003
 // See also: https://github.com/dotnet/runtime/issues/782
 
+// ReSharper disable All
+
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Text.Json;
@@ -13,7 +15,6 @@ namespace Resharper.CodeInspections.BitbucketPipe;
 [ExcludeFromCodeCoverage]
 public class JsonSnakeCaseNamingPolicy : JsonNamingPolicy
 {
-    // ReSharper disable once CognitiveComplexity
     public override string ConvertName(string name)
     {
         if (string.IsNullOrEmpty(name)) return name;

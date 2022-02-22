@@ -33,7 +33,7 @@ public class
     public void It_Should_Send_Report_To_Bitbucket()
     {
         MessageHandlerMock.VerifyRequest(request =>
-                request.RequestUri!.PathAndQuery.EndsWith("/reports/resharper-inspections") &&
+                request.RequestUri!.PathAndQuery.EndsWith("/reports/resharper-inspections", StringComparison.Ordinal) &&
                 request.Method == HttpMethod.Put,
             Times.Once());
     }
@@ -43,8 +43,9 @@ public class
     {
         MessageHandlerMock.VerifyRequest(async request =>
         {
-            bool isAnnotationsRequest = request.RequestUri!.PathAndQuery.EndsWith("/annotations") &&
-                                        request.Method == HttpMethod.Post;
+            bool isAnnotationsRequest =
+                request.RequestUri!.PathAndQuery.EndsWith("/annotations", StringComparison.Ordinal) &&
+                request.Method == HttpMethod.Post;
 
             if (!isAnnotationsRequest) return false;
 

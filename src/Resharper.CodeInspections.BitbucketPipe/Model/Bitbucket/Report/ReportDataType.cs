@@ -1,9 +1,11 @@
 ﻿using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
+using JetBrains.Annotations;
 
 namespace Resharper.CodeInspections.BitbucketPipe.Model.Bitbucket.Report;
 
 [JsonConverter(typeof(JsonStringEnumMemberConverter))]
+[PublicAPI]
 public enum ReportDataType
 {
     [EnumMember(Value = "BOOLEAN")] Boolean,

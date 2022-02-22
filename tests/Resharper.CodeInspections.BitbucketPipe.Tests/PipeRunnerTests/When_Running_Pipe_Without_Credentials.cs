@@ -24,7 +24,7 @@ public class When_Running_Pipe_Without_Credentials : PipeRunnerSpecificationBase
     public void It_Should_Not_Send_Build_Status_To_Bitbucket()
     {
         MessageHandlerMock.VerifyRequest(
-            request => request.RequestUri!.PathAndQuery.EndsWith("statuses/build"),
+            request => request.RequestUri!.PathAndQuery.EndsWith("statuses/build", StringComparison.Ordinal),
             Times.Never());
     }
 }

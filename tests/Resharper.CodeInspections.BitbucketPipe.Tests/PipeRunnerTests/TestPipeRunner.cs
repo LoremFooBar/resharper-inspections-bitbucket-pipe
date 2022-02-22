@@ -8,7 +8,7 @@ namespace Resharper.CodeInspections.BitbucketPipe.Tests.PipeRunnerTests;
 
 public class TestPipeRunner : PipeRunner
 {
-    private Action<IServiceCollection> _configureTestServices;
+    private readonly Action<IServiceCollection> _configureTestServices;
 
     public TestPipeRunner([NotNull] IEnvironmentVariableProvider environmentVariableProvider) : base(
         environmentVariableProvider) { }
@@ -33,7 +33,4 @@ public class TestPipeRunner : PipeRunner
         base.ConfigureServices(services);
         _configureTestServices?.Invoke(services);
     }
-
-    public void ConfigureTestServices(Action<IServiceCollection> configureTestServices) =>
-        _configureTestServices = configureTestServices;
 }

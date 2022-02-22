@@ -2,16 +2,16 @@
 
 public static class TestData
 {
-    private const string TestDataDirectoryName = "test-data";
+    private const string testDataDirectoryName = "test-data";
 
     public static string NonEmptyReportFilePath { get; } =
-        Path.Combine(TestDataDirectoryName, "report-with-issues.xml");
+        Path.Combine(testDataDirectoryName, "report-with-issues.xml");
 
     public static string EmptyReportFilePath { get; } =
-        Path.Combine(TestDataDirectoryName, "report-without-issues.xml");
+        Path.Combine(testDataDirectoryName, "report-without-issues.xml");
 
     public static string NonEmptyReportForDiffFilePath { get; } =
-        Path.Combine(TestDataDirectoryName, "report-with-issues-for-diff.xml");
+        Path.Combine(testDataDirectoryName, "report-with-issues-for-diff.xml");
 
     /// <summary>
     /// this diff should produce changes
@@ -20,5 +20,5 @@ public static class TestData
     /// in lines 1-6
     /// </summary>
     public static string DiffText { get; } =
-        File.ReadAllText(Path.Combine(TestDataDirectoryName, "diff.txt")).Replace("\r\n", "\n");
+        File.ReadAllText(Path.Combine(testDataDirectoryName, "diff.txt")).Replace("\r\n", "\n");
 }

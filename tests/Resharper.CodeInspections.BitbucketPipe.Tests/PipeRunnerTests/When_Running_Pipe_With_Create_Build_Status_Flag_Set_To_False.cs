@@ -26,7 +26,7 @@ public class When_Running_Pipe_With_Create_Build_Status_Flag_Set_To_False : Pipe
     public void It_Should_Not_Send_Build_Status_To_Bitbucket()
     {
         MessageHandlerMock.VerifyRequest(
-            request => request.RequestUri!.PathAndQuery.EndsWith("statuses/build"),
+            request => request.RequestUri!.PathAndQuery.EndsWith("statuses/build", StringComparison.Ordinal),
             Times.Never());
     }
 }
