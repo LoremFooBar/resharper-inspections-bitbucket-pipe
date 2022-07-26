@@ -22,20 +22,20 @@
   <Issues>
     <Project Name="Resharper.CodeInspections.BitbucketPipe.Tests">
       <Issue TypeId="RedundantUsingDirective"
-             File="src/Camilyo.DomainManagement.Service/Camilyo.DomainManagement.Service.csproj"
+             File="src/LoremFooBar.ProjectA.Service/LoremFooBar.ProjectA.Service.csproj"
              Offset="0-78"
              Message="Using directive is not required by the code and can be safely removed"/>
       <Issue TypeId="RedundantUsingDirective"
-             File="src/Camilyo.DomainManagement.Service/Startup.cs"
+             File="src/LoremFooBar.ProjectA.Service/Startup.cs"
              Offset="80-142"
              Line="20"
              Message="Using directive is not required by the code and can be safely removed"/>
-      <Issue TypeId="CheckNamespace" File="src/Camilyo.DomainManagement.Service/Camilyo.DomainManagement.Service.csproj"
+      <Issue TypeId="CheckNamespace" File="src/LoremFooBar.ProjectA.Service/LoremFooBar.ProjectA.Service.csproj"
              Offset="214-284"
              Line="45"
              Message="Namespace does not correspond to file location, should be: 'Resharper.CodeInspections.BitbucketPipe.Tests.ResharperReportTests'"/>
       <Issue TypeId="UnusedType.Global"
-             File="src/Camilyo.DomainManagement.Service/Camilyo.DomainManagement.Service.csproj"
+             File="src/LoremFooBar.ProjectA.Service/LoremFooBar.ProjectA.Service.csproj"
              Offset="306-349"
              Line="44"
              Message="Class 'When_Creating_Annotations_From_Empty_Report' is never used"/>

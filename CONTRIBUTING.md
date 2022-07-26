@@ -8,8 +8,8 @@ format for all commit messages.
 ## Deploy to Docker Hub
 
 ```shell
-docker build --rm -t lazyboy1/resharper-inspections-bitbucket-pipe:<VERSION> .
-docker push lazyboy1/resharper-inspections-bitbucket-pipe:<VERSION>
+docker build --rm -t loremfoobar/resharper-inspections-bitbucket-pipe:<VERSION> .
+docker push loremfoobar/resharper-inspections-bitbucket-pipe:<VERSION>
 ```
 
 ### Version Release Commit

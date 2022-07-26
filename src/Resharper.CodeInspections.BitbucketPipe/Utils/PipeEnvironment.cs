@@ -6,7 +6,8 @@ public class PipeEnvironment
     {
         IsDebugMode = environmentVariableProvider.GetEnvironmentVariableOrDefault("DEBUG", "false")
             .Equals("true", StringComparison.OrdinalIgnoreCase);
-        string environmentName = environmentVariableProvider.GetEnvironmentVariableOrDefault("NETCORE_ENVIRONMENT", "Production");
+        string environmentName =
+            environmentVariableProvider.GetEnvironmentVariableOrDefault("NETCORE_ENVIRONMENT", "Production");
         IsDevelopment = environmentName.Equals("Development", StringComparison.OrdinalIgnoreCase);
     }
 

@@ -1,7 +1,5 @@
 ﻿FROM mcr.microsoft.com/dotnet/sdk:6.0 as build
 
-LABEL maintainer="@lazyboy1"
-
 ARG ProjectName=Resharper.CodeInspections.BitbucketPipe
 
 WORKDIR /source

@@ -2,13 +2,13 @@ diff --git a/tests/Resharper.CodeInspections.BitbucketPipe.Tests/ResharperReport
 index 19fb7e0..f6bd303 100644
 --- a/tests/Resharper.CodeInspections.BitbucketPipe.Tests/ResharperReportTests/When_Creating_Report_From_File_That_Does_Not_Contain_Issues.cs
 +++ b/tests/Resharper.CodeInspections.BitbucketPipe.Tests/ResharperReportTests/When_Creating_Report_From_File_That_Does_Not_Contain_Issues.cs
-@@ -1,8 +1,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Camilyo.DomainManagement.Re
+@@ -1,8 +1,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoremFooBar.ProjectA.Re
  EndProject
- Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Camilyo.DomainManagement.Service.Tests", "tests\Camilyo.DomainManagement.Service.Tests\Camilyo.DomainManagement.Service.Tests.csproj", "{97E4CC83-A3BE-4DEC-8FFE-53F1B53BC105}"
+ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoremFooBar.ProjectA.Service.Tests", "tests\LoremFooBar.ProjectA.Service.Tests\LoremFooBar.ProjectA.Service.Tests.csproj", "{97E4CC83-A3BE-4DEC-8FFE-53F1B53BC105}"
  EndProject
--Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Camilyo.DomainManagement.Tests", "tests\Camilyo.DomainManagement.Tests\Camilyo.DomainManagement.Tests.csproj", "{90AEA8F9-7B93-45E8-A341-3AB459D29B7C}"
+-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoremFooBar.ProjectA.Tests", "tests\LoremFooBar.ProjectA.Tests\LoremFooBar.ProjectA.Tests.csproj", "{90AEA8F9-7B93-45E8-A341-3AB459D29B7C}"
 -EndProject
- Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Camilyo.DomainManagement.Contracts", "src\Camilyo.DomainManagement.Contracts\Camilyo.DomainManagement.Contracts.csproj", "{A8F06129-E78E-4507-9555-A13DC39E818C}"
+ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoremFooBar.ProjectA.Contracts", "src\LoremFooBar.ProjectA.Contracts\LoremFooBar.ProjectA.Contracts.csproj", "{A8F06129-E78E-4507-9555-A13DC39E818C}"
  EndProject
  Global
 @@ -54,10 +52,6 @@ Global
@@ -30,16 +30,16 @@ index 19fb7e0..f6bd303 100644
  		{A8F06129-E78E-4507-9555-A13DC39E818C} = {2CB0B901-C90C-4B83-A384-1E0B6D84BEA6}
  	EndGlobalSection
  	GlobalSection(ExtensibilityGlobals) = postSolution
-diff --git a/src/Camilyo.DomainManagement.Service/Camilyo.DomainManagement.Service.csproj b/src/Camilyo.DomainManagement.Service/Camilyo.DomainManagement.Service.csproj
+diff --git a/src/LoremFooBar.ProjectA.Service/LoremFooBar.ProjectA.Service.csproj b/src/LoremFooBar.ProjectA.Service/LoremFooBar.ProjectA.Service.csproj
 index 1c6e972..ecc34c5 100644
---- a/src/Camilyo.DomainManagement.Service/Camilyo.DomainManagement.Service.csproj
-+++ b/src/Camilyo.DomainManagement.Service/Camilyo.DomainManagement.Service.csproj
+--- a/src/LoremFooBar.ProjectA.Service/LoremFooBar.ProjectA.Service.csproj
++++ b/src/LoremFooBar.ProjectA.Service/LoremFooBar.ProjectA.Service.csproj
 @@ -13,6 +13,7 @@
          <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
          <PackageReference Include="Azure.Identity" Version="1.2.3" />
-         <PackageReference Include="Camilyo.Framework.ApplicationInsights" Version="1.0.0" />
-+        <PackageReference Include="Camilyo.Framework.Web" Version="0.10.0" />
-         <PackageReference Include="Camilyo.Web.Contracts" Version="1.0.90" />
+         <PackageReference Include="LoremFooBar.Framework.ApplicationInsights" Version="1.0.0" />
++        <PackageReference Include="LoremFooBar.Framework.Web" Version="0.10.0" />
+         <PackageReference Include="LoremFooBar.Web.Contracts" Version="1.0.90" />
          <PackageReference Include="IdentityModel" Version="4.3.1" />
          <PackageReference Include="JetBrains.Annotations" Version="2020.3.0" />
 @@ -40,8 +41,8 @@
@@ -53,19 +53,19 @@ index 1c6e972..ecc34c5 100644
      </ItemGroup>
 
      <ItemGroup>
-diff --git a/src/Camilyo.DomainManagement.Service/Startup.cs b/src/Camilyo.DomainManagement.Service/Startup.cs
+diff --git a/src/LoremFooBar.ProjectA.Service/Startup.cs b/src/LoremFooBar.ProjectA.Service/Startup.cs
 index 99859f4..242b240 100644
---- a/src/Camilyo.DomainManagement.Service/Startup.cs
-+++ b/src/Camilyo.DomainManagement.Service/Startup.cs
-@@ -17,6 +17,7 @@ using Camilyo.DomainManagement.Service.Options;
- using Camilyo.DomainManagement.Service.Resources;
- using Camilyo.DomainManagement.Service.Services;
- using Camilyo.Framework.ApplicationInsights;
-+using Camilyo.Framework.Web.Specification;
+--- a/src/LoremFooBar.ProjectA.Service/Startup.cs
++++ b/src/LoremFooBar.ProjectA.Service/Startup.cs
+@@ -17,6 +17,7 @@ using LoremFooBar.ProjectA.Service.Options;
+ using LoremFooBar.ProjectA.Service.Resources;
+ using LoremFooBar.ProjectA.Service.Services;
+ using LoremFooBar.Framework.ApplicationInsights;
++using LoremFooBar.Framework.Web.Specification;
  using JsonApiDotNetCore.Configuration;
  using JsonApiDotNetCore.Services;
  using Microsoft.ApplicationInsights;
-@@ -173,7 +174,11 @@ namespace Camilyo.DomainManagement.Service
+@@ -173,7 +174,11 @@ namespace LoremFooBar.ProjectA.Service
                              }, new List<string>()
                          }
                      });
@@ -77,19 +77,19 @@ index 99859f4..242b240 100644
          }
 
          public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-diff --git a/src/Camilyo.DomainManagement.Service/packages.lock.json b/src/Camilyo.DomainManagement.Service/packages.lock.json
+diff --git a/src/LoremFooBar.ProjectA.Service/packages.lock.json b/src/LoremFooBar.ProjectA.Service/packages.lock.json
 File excluded by pattern "packages.lock.json"
-diff --git a/tests/Camilyo.DomainManagement.Registrars.Tests/FakeRegistrarTests/When_Making_Domain_Registration_Request.cs b/tests/Camilyo.DomainManagement.Registrars.Tests/FakeRegistrarTests/When_Making_Domain_Registration_Request.cs
+diff --git a/tests/LoremFooBar.ProjectA.Registrars.Tests/FakeRegistrarTests/When_Making_Domain_Registration_Request.cs b/tests/LoremFooBar.ProjectA.Registrars.Tests/FakeRegistrarTests/When_Making_Domain_Registration_Request.cs
 deleted file mode 100644
 index acd6dff..0000000
---- a/tests/Camilyo.DomainManagement.Registrars.Tests/FakeRegistrarTests/When_Making_Domain_Registration_Request.cs
+--- a/tests/LoremFooBar.ProjectA.Registrars.Tests/FakeRegistrarTests/When_Making_Domain_Registration_Request.cs
 +++ /dev/null
 @@ -1,86 +0,0 @@
 -Ã¯Â»Â¿// using System.Threading.Tasks;
--// using Camilyo.DomainManagement.Registrars.MonoRegistrar;
--// using Camilyo.Framework.Testing;
+-// using LoremFooBar.ProjectA.Registrars.MonoRegistrar;
+-// using LoremFooBar.Framework.Testing;
 -//
--// namespace Camilyo.DomainManagement.Registrars.Tests.FakeRegistrarTests
+-// namespace LoremFooBar.ProjectA.Registrars.Tests.FakeRegistrarTests
 -// {
 -//     public class When_Making_Domain_Registration_Request: SpecificationBase
 -//     {
@@ -105,7 +105,7 @@ index acd6dff..0000000
 -//     {
 -//         await base.WhenAsync();
 -//
--//         await _fakeRegistrar.Register(CreateFakeValidRequestObject("Camilyo.com"));
+-//         await _fakeRegistrar.Register(CreateFakeValidRequestObject("example.com"));
 -//         await _fakeRegistrar.Register(CreateFakeValidRequestObject("amazon.com"));
 -//     }
 -//

@@ -28,7 +28,7 @@ public class When_Getting_Required_Environment_Variable_That_Does_Not_Exist : Sp
         _func = () => _environmentVariableProvider.GetRequiredEnvironmentVariable("Lies");
     }
 
-    [ThenAttribute]
+    [Then]
     public void It_Should_Throw_RequiredEnvironmentVariableNotFoundException()
     {
         _func.Should().Throw<RequiredEnvironmentVariableNotFoundException>();
