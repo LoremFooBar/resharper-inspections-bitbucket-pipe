@@ -63,8 +63,6 @@ definitions:
         name: Renovate
         image: loremfoobar/dotnet-node:7.0-18.x
         script:
-          - git config --global user.email "bot@renovateapp.com"
-          - git config --global user.name "Renovate Bot"
           - export RENOVATE_REPOSITORIES=$BITBUCKET_REPO_FULL_NAME
           - yarn renovate
 
