@@ -54,3 +54,12 @@ example-inspect.xml
 # test results
 test-reports/
 tests/**/TestResults/
+
+# yarn
+.yarn/*
+!.yarn/cache
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions

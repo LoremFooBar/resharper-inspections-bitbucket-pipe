@@ -1,0 +1,7 @@
+{
+  "name": "resharper-inspections-bitbucket-pipe",
+  "packageManager": "yarn@3.3.1",
+  "dependencies": {
+    "renovate": "34.73.1"
+  }
+}
