@@ -59,17 +59,8 @@ definitions:
               DESTINATION_SAS_TOKEN: ?$COVERAGE_REPORT_BLOB_WRITE_SAS
               DEBUG: "true"
 
-    - step: &renovate
-        name: Renovate
-        image: loremfoobar/dotnet-node:7.0-18.x
-        script:
-          - export RENOVATE_REPOSITORIES=$BITBUCKET_REPO_FULL_NAME
-          - yarn renovate
 
 pipelines:
-  custom:
-    renovate:
-      - step: *renovate
   pull-requests:
     "**":
       - step: *build-and-test
