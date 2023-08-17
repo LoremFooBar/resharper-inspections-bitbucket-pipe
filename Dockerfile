@@ -1,4 +1,4 @@
-﻿FROM mcr.microsoft.com/dotnet/sdk:7.0 as build
+﻿FROM mcr.microsoft.com/dotnet/sdk:7.0-alpine as build
 
 ARG ProjectName=Resharper.CodeInspections.BitbucketPipe
 
@@ -14,7 +14,7 @@ COPY src/$ProjectName/. ./
 RUN dotnet publish -c Release -o /app
 
 
-FROM mcr.microsoft.com/dotnet/runtime:7.0 as runtime
+FROM mcr.microsoft.com/dotnet/runtime:7.0-alpine as runtime
 
 WORKDIR /app
 
