@@ -18,7 +18,7 @@ public class EnvironmentVariableProviderMock
             unionEnv = DefaultEnvironment;
 
         var envMock = new Mock<IEnvironmentVariableProvider> { CallBase = true };
-        envMock.Setup(_ => _.GetEnvironmentVariable(It.IsAny<string>()))
+        envMock.Setup(p => p.GetEnvironmentVariable(It.IsAny<string>()))
             .Returns((string varName) =>
             {
                 unionEnv.TryGetValue(varName, out string val);

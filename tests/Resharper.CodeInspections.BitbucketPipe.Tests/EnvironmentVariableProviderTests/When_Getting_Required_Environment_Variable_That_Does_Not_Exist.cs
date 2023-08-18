@@ -15,7 +15,7 @@ public class When_Getting_Required_Environment_Variable_That_Does_Not_Exist : Sp
 
         var envMock = new Mock<IEnvironmentVariableProvider> { CallBase = true };
         envMock
-            .Setup(_ => _.GetEnvironmentVariable(It.IsAny<string>()))
+            .Setup(p => p.GetEnvironmentVariable(It.IsAny<string>()))
             .Returns<string>(_ => null);
 
         _environmentVariableProvider = envMock.Object;
