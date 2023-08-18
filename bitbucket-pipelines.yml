@@ -4,9 +4,7 @@ definitions:
       path: ".resharper-cache"
       key:
         files:
-          - "**.cs"
-          - "**.csproj"
-          - "**.sln"
+          - "*.sln"
   steps:
     - step: &build-and-test
         name: Build and test
