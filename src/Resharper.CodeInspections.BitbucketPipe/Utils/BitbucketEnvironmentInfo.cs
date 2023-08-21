@@ -1,4 +1,6 @@
-﻿namespace Resharper.CodeInspections.BitbucketPipe.Utils;
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Resharper.CodeInspections.BitbucketPipe.Utils;
 
 public class BitbucketEnvironmentInfo
 {
@@ -6,12 +8,12 @@ public class BitbucketEnvironmentInfo
     {
         if (environmentVariableProvider == null) return;
 
-        CommitHash = environmentVariableProvider.GetRequiredEnvironmentVariable("BITBUCKET_COMMIT");
-        Workspace = environmentVariableProvider.GetRequiredEnvironmentVariable("BITBUCKET_WORKSPACE");
-        RepoSlug = environmentVariableProvider.GetRequiredEnvironmentVariable("BITBUCKET_REPO_SLUG");
-        CloneDir = environmentVariableProvider.GetRequiredEnvironmentVariable("BITBUCKET_CLONE_DIR");
+        CommitHash = environmentVariableProvider.GetRequiredString("BITBUCKET_COMMIT");
+        Workspace = environmentVariableProvider.GetRequiredString("BITBUCKET_WORKSPACE");
+        RepoSlug = environmentVariableProvider.GetRequiredString("BITBUCKET_REPO_SLUG");
+        CloneDir = environmentVariableProvider.GetRequiredString("BITBUCKET_CLONE_DIR");
 
-        PullRequestId = environmentVariableProvider.GetEnvironmentVariable("BITBUCKET_PR_ID");
+        PullRequestId = environmentVariableProvider.GetString("BITBUCKET_PR_ID");
         IsPullRequest = !string.IsNullOrEmpty(PullRequestId);
     }
 
@@ -21,8 +23,10 @@ public class BitbucketEnvironmentInfo
 
     public string CommitHash { get; init; } = "";
 
-    public string? CloneDir { get; init; }
+    public string? CloneDir { get; }
+
     public string? PullRequestId { get; init; }
 
+    [MemberNotNullWhen(true, nameof(PullRequestId))]
     public bool IsPullRequest { get; }
 }

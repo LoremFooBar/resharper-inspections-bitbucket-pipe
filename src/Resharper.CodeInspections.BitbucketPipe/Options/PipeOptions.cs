@@ -2,6 +2,8 @@
 
 public class PipeOptions
 {
+    public const string SectionName = "PipeOptions";
+
     /// <summary>
     /// Whether to create a build status representing whether any issues were found.
     /// </summary>

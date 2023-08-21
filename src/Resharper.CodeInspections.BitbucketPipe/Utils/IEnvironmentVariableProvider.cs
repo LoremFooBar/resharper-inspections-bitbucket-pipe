@@ -2,12 +2,15 @@
 
 public interface IEnvironmentVariableProvider
 {
-    string? GetEnvironmentVariable(string variableName);
+    string? GetString(string variableName);
 
-    string GetRequiredEnvironmentVariable(string variableName) =>
-        GetEnvironmentVariable(variableName) ??
+    string GetRequiredString(string variableName) =>
+        GetString(variableName) ??
         throw new RequiredEnvironmentVariableNotFoundException(variableName);
 
-    string GetEnvironmentVariableOrDefault(string variableName, string defaultValue) =>
-        GetEnvironmentVariable(variableName) ?? defaultValue;
+    string GetStringOrDefault(string variableName, string defaultValue) =>
+        GetString(variableName) ?? defaultValue;
+
+    bool GetBoolOrDefault(string variableName, bool defaultValue) =>
+        GetString(variableName)?.Equals("true", StringComparison.OrdinalIgnoreCase) ?? defaultValue;
 }

@@ -2,5 +2,5 @@
 
 public class EnvironmentVariableProvider : IEnvironmentVariableProvider
 {
-    public string? GetEnvironmentVariable(string variableName) => Environment.GetEnvironmentVariable(variableName);
+    public string? GetString(string variableName) => Environment.GetEnvironmentVariable(variableName);
 }

@@ -4,6 +4,8 @@ namespace Resharper.CodeInspections.BitbucketPipe.Options;
 
 public class BitbucketAuthenticationOptions
 {
+    public const string SectionName = "BitbucketAuthenticationOptions";
+
     public string? Username { get; set; }
     public string? AppPassword { get; set; }
 
