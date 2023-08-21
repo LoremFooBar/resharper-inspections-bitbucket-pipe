@@ -29,6 +29,13 @@ public class
         TestPipeRunner = new TestPipeRunner(environmentVariableProviderMock.Object, MessageHandlerMock);
     }
 
+    protected override async Task WhenAsync()
+    {
+        await base.WhenAsync();
+
+        await TestPipeRunner.RunPipeAsync();
+    }
+
     [Then]
     public void It_Should_Send_Report_To_Bitbucket()
     {

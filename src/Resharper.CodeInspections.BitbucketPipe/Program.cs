@@ -8,12 +8,15 @@ namespace Resharper.CodeInspections.BitbucketPipe;
 internal static class Program
 {
     // ReSharper disable once InconsistentNaming
-    private static async Task Main()
+    private static async Task<int> Main()
     {
-        bool isDebugMode = new PipeEnvironment(new EnvironmentVariableProvider()).IsDebugMode;
+        var environmentVariableProvider = new EnvironmentVariableProvider();
+        bool isDebugMode = new PipeEnvironment(environmentVariableProvider).IsDebugMode;
         Log.Logger = LoggerInitializer.CreateLogger(isDebugMode);
         Log.Debug("DEBUG={IsDebug}", isDebugMode);
 
-        await new PipeRunner(new EnvironmentVariableProvider()).RunPipeAsync();
+        var exitCode = await new PipeRunner(environmentVariableProvider).RunPipeAsync();
+
+        return exitCode.Code;
     }
 }

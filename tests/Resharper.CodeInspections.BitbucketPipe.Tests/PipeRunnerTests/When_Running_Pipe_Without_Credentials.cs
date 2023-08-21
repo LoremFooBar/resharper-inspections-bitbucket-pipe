@@ -20,6 +20,13 @@ public class When_Running_Pipe_Without_Credentials : PipeRunnerSpecificationBase
         TestPipeRunner = new TestPipeRunner(environmentVariableProviderMock.Object, MessageHandlerMock);
     }
 
+    protected override async Task WhenAsync()
+    {
+        await base.WhenAsync();
+
+        await TestPipeRunner.RunPipeAsync();
+    }
+
     [Then]
     public void It_Should_Not_Send_Build_Status_To_Bitbucket()
     {

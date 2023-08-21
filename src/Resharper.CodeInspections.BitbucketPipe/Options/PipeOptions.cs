@@ -16,4 +16,9 @@ public class PipeOptions
     /// Whether to fail only for issues found in diff. For PRs - the PR diff, otherwise - diff with previous commit.
     /// </summary>
     public bool IncludeOnlyIssuesInDiff { get; set; }
+
+    /// <summary>
+    /// Whether to fail current build step if any issues found.
+    /// </summary>
+    public bool FailWhenIssuesFound { get; set; }
 }

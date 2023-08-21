@@ -22,7 +22,7 @@ public class PipeRunner
         _pipeEnvironment = new PipeEnvironment(_environmentVariableProvider);
     }
 
-    public async Task RunPipeAsync()
+    public async Task<ExitCode> RunPipeAsync()
     {
         var services = new ServiceCollection();
         ConfigureServices(services);
@@ -38,6 +38,10 @@ public class PipeRunner
         var bitbucketClient = serviceProvider.GetRequiredService<BitbucketClient>();
         await bitbucketClient.CreateReportAsync(pipelineReport, annotations);
         await bitbucketClient.CreateBuildStatusAsync(pipelineReport);
+
+        return pipeOptions.Value.FailWhenIssuesFound && issuesReport.TotalIssues > 0
+            ? ExitCode.IssuesFound
+            : ExitCode.Success;
     }
 
     protected virtual void ConfigureServices(IServiceCollection services)
@@ -60,11 +64,16 @@ public class PipeRunner
             _environmentVariableProvider.GetEnvironmentVariableOrDefault("INCLUDE_ONLY_ISSUES_IN_DIFF", "false")
                 .Equals("true", StringComparison.OrdinalIgnoreCase);
 
+        bool failWhenIssuesFound = _environmentVariableProvider
+            .GetEnvironmentVariableOrDefault("FAIL_WHEN_ISSUES_FOUND", "false")
+            .Equals("true", StringComparison.OrdinalIgnoreCase);
+
         var pipeOptions = new PipeOptions
         {
             CreateBuildStatus = createBuildStatus,
             InspectionsXmlPathOrPattern = inspectionsXmlPathOrPattern,
             IncludeOnlyIssuesInDiff = onlyIssuesInDiff,
+            FailWhenIssuesFound = failWhenIssuesFound,
         };
 
         SetupBitbucketClient(services, authOptions);
@@ -83,6 +92,7 @@ public class PipeRunner
                 options.CreateBuildStatus = pipeOptions.CreateBuildStatus;
                 options.InspectionsXmlPathOrPattern = pipeOptions.InspectionsXmlPathOrPattern;
                 options.IncludeOnlyIssuesInDiff = pipeOptions.IncludeOnlyIssuesInDiff;
+                options.FailWhenIssuesFound = pipeOptions.FailWhenIssuesFound;
             })
             .AddSingleton(_environmentVariableProvider)
             .AddSingleton(_pipeEnvironment)

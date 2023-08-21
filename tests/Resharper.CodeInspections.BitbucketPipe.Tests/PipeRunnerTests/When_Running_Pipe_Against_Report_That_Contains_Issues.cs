@@ -24,6 +24,13 @@ public class When_Running_Pipe_Against_Report_That_Contains_Issues : PipeRunnerS
         TestPipeRunner = new TestPipeRunner(environmentVariableProvider.Object, MessageHandlerMock);
     }
 
+    protected override async Task WhenAsync()
+    {
+        await base.WhenAsync();
+
+        await TestPipeRunner.RunPipeAsync();
+    }
+
     [Then]
     public void It_Should_Send_Report_To_Bitbucket()
     {

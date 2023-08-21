@@ -21,11 +21,4 @@ public class PipeRunnerSpecificationBase : SpecificationBase
             .SetupRequest(request => request.Method != HttpMethod.Get)
             .ReturnsResponse(HttpStatusCode.OK);
     }
-
-    protected override async Task WhenAsync()
-    {
-        await base.WhenAsync();
-
-        await TestPipeRunner.RunPipeAsync();
-    }
 }

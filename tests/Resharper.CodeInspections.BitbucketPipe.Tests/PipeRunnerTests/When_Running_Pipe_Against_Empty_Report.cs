@@ -7,6 +7,8 @@ namespace Resharper.CodeInspections.BitbucketPipe.Tests.PipeRunnerTests;
 
 public class When_Running_Pipe_Against_Empty_Report : PipeRunnerSpecificationBase
 {
+    private ExitCode _exitCode;
+
     protected override void Given()
     {
         base.Given();
@@ -20,6 +22,13 @@ public class When_Running_Pipe_Against_Empty_Report : PipeRunnerSpecificationBas
             });
 
         TestPipeRunner = new TestPipeRunner(environmentVariableProviderMock.Object, MessageHandlerMock);
+    }
+
+    protected override async Task WhenAsync()
+    {
+        await base.WhenAsync();
+
+        _exitCode = await TestPipeRunner.RunPipeAsync();
     }
 
     [Then]
@@ -44,5 +53,11 @@ public class When_Running_Pipe_Against_Empty_Report : PipeRunnerSpecificationBas
         MessageHandlerMock.VerifyRequest(
             request => request.RequestUri!.PathAndQuery.Contains("statuses/build"),
             Times.Once());
+    }
+
+    [Then]
+    public void It_Should_Exit_With_Code_0()
+    {
+        _exitCode.Code.Should().Be(0);
     }
 }
