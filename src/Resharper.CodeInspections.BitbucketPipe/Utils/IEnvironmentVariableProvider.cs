@@ -10,7 +10,4 @@ public interface IEnvironmentVariableProvider
 
     string GetStringOrDefault(string variableName, string defaultValue) =>
         GetString(variableName) ?? defaultValue;
-
-    bool GetBoolOrDefault(string variableName, bool defaultValue) =>
-        GetString(variableName)?.Equals("true", StringComparison.OrdinalIgnoreCase) ?? defaultValue;
 }
