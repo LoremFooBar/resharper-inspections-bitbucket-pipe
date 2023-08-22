@@ -53,6 +53,8 @@ public class ReSharperReportCreator
             report.IssueTypes.Types?.AsReadOnly() ?? new List<IssueType>().AsReadOnly(),
             filteredIssues);
 
+        _logger.LogInformation("Found {TotalIssues} issues in report file", simpleReport.TotalIssues);
+
         return simpleReport;
     }
 
