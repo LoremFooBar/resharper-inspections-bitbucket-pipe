@@ -1,5 +1,5 @@
 name: ReSharper Inspections
-image: loremfoobar/resharper-inspections-bitbucket-pipe:1.0.0
+image: loremfoobar/resharper-inspections-bitbucket-pipe:1.1.0
 description: Post ReSharper inspections to Bitbucket as a report with annotations
 category: Code quality
 repository: https://bitbucket.org/loremfoobar/resharper-inspections-bitbucket-pipe
