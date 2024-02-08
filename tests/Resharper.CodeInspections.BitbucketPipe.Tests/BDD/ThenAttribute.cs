@@ -2,4 +2,4 @@
 
 namespace Resharper.CodeInspections.BitbucketPipe.Tests.BDD;
 
-public class ThenAttribute : TestAttribute { }
+public class ThenAttribute : TestAttribute;

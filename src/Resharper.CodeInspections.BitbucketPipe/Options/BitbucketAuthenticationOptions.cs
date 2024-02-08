@@ -2,6 +2,7 @@
 
 namespace Resharper.CodeInspections.BitbucketPipe.Options;
 
+[Serializable]
 public class BitbucketAuthenticationOptions
 {
     public const string SectionName = "BitbucketAuthenticationOptions";

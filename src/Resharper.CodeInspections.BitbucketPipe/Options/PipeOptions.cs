@@ -1,5 +1,6 @@
 ﻿namespace Resharper.CodeInspections.BitbucketPipe.Options;
 
+[Serializable]
 public class PipeOptions
 {
     public const string SectionName = "PipeOptions";
