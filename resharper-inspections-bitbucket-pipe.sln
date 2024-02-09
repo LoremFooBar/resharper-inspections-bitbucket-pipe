@@ -22,6 +22,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{39D624AA-F44
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{47B8A0A0-0CD9-4D96-BF2E-5DD3604190D1}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "scripts", "scripts", "{3A21F475-9BF6-475E-B465-866477D4415E}"
+	ProjectSection(SolutionItems) = preProject
+		scripts\docker-build.ps1 = scripts\docker-build.ps1
+		scripts\docker-push.ps1 = scripts\docker-push.ps1
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -40,5 +46,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{53392CB8-3EFC-440A-B51A-50FBB8DAC4FB} = {39D624AA-F446-4E86-B0BC-09FC0825DDFD}
 		{CA6F7D57-75F8-4E17-B59D-C4469E96384D} = {47B8A0A0-0CD9-4D96-BF2E-5DD3604190D1}
+		{3A21F475-9BF6-475E-B465-866477D4415E} = {6A52C4FA-50EB-43AC-BEB3-8760B50CB46C}
 	EndGlobalSection
 EndGlobal
