@@ -1,22 +1,13 @@
 definitions:
-  caches:
-    resharper:
-      path: ".resharper-cache"
-      key:
-        files:
-          - "*.sln"
   steps:
     - step: &build-and-test
         name: Build and test
         image: mcr.microsoft.com/dotnet/sdk:8.0
-        caches:
-          - dotnetcore
-          - resharper
         script:
           - dotnet tool restore
           - dotnet restore --locked-mode
           - dotnet build --no-restore
-          - dotnet jb inspectcode --no-build --config=inspectcode.config --caches-home="./.resharper-cache"
+          - dotnet jb inspectcode --no-build --config=inspectcode.config -f=xml
 
           # create resharper inspections report
           - pipe: docker://loremfoobar/resharper-inspections-bitbucket-pipe:1.1.0
