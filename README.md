@@ -3,9 +3,9 @@
 Create a report with annotations from a ReSharper inspections XML, and a
 corresponding build status with the status of the report.
 
-> **Note:** Jetbrains will soon deprecate the XML output format. For SARIF
-> format,
-> use [loremfoobar/sarif-bitbucket-pipe](https://bitbucket.org/loremfoobar/sarif-bitbucket-pipe)
+> **Note:** JetBrains will soon deprecate the XML output format. For SARIF
+> format, use
+> [loremfoobar/sarif-bitbucket-pipe](https://bitbucket.org/loremfoobar/sarif-bitbucket-pipe)
 
 ## YAML Definition
 
