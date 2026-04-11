@@ -26,7 +26,7 @@ public class When_Creating_Pipeline_Report_From_Empty_Report : SpecificationBase
             CommitHash = "f46f058a160a42c68e4b30ee4598cbfc",
         };
 
-        var bitbucketClientSimpleMock = new BitbucketClientSimpleMock(true, true, environmentInfo);
+        var bitbucketClientSimpleMock = new BitbucketClientSimpleMock(true, environmentInfo);
         var pipeOptions = new OptionsWrapper<PipeOptions>(new PipeOptions());
         _reSharperReportCreator = new ReSharperReportCreator(pipeOptions, bitbucketClientSimpleMock.BitbucketClient,
             NullLogger<ReSharperReportCreator>.Instance);

@@ -16,8 +16,8 @@ public class When_Running_Pipe_Against_Report_That_Contains_Issues : PipeRunnerS
         var environmentVariableProvider =
             new EnvironmentVariableProviderMock(TestData.NonEmptyReportFilePath, new Dictionary<string, string>
             {
-                ["BITBUCKET_USERNAME"] = "user",
-                ["BITBUCKET_APP_PASSWORD"] = "password",
+                ["ACCOUNT_EMAIL"] = "user@example.com",
+                ["API_TOKEN"] = "password",
                 ["CREATE_BUILD_STATUS"] = "true",
             });
 

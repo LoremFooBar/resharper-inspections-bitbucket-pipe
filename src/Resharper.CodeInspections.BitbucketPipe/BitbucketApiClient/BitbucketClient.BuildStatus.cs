@@ -10,12 +10,6 @@ public partial class BitbucketClient
     {
         if (!_pipeOptions.CreateBuildStatus) return;
 
-        if (!_authOptions.UseAuthentication) {
-            _logger.LogWarning("Will not create build status because authentication info was not provided");
-
-            return;
-        }
-
         var buildStatus = BuildStatus.CreateFromPipelineReport(report, _bitbucketEnvironmentInfo.Workspace,
             _bitbucketEnvironmentInfo.RepoSlug);
         string serializedBuildStatus = Serialize(buildStatus);

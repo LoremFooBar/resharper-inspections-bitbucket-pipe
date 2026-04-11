@@ -1,0 +1,16 @@
+version: 3
+
+tasks:
+  docker-build:
+    requires:
+      vars:
+        - VERSION
+    cmds:
+      - docker build --rm -t loremfoobar/resharper-inspections-bitbucket-pipe:{{ .VERSION }} .
+  docker-build-and-push:
+    requires: 
+      vars:
+        - VERSION
+    cmds:
+      - task: docker-build
+      - docker push loremfoobar/resharper-inspections-bitbucket-pipe:{{ .VERSION }}

@@ -14,8 +14,8 @@ public class When_Running_Pipe_With_Create_Build_Status_Flag_Set_To_False : Pipe
         var environmentVariableProviderMock =
             new EnvironmentVariableProviderMock(TestData.EmptyReportFilePath, new Dictionary<string, string>
             {
-                ["BITBUCKET_USERNAME"] = "username",
-                ["BITBUCKET_APP_PASSWORD"] = "password",
+                ["ACCOUNT_EMAIL"] = "user@example.com",
+                ["API_TOKEN"] = "password",
                 ["CREATE_BUILD_STATUS"] = "false",
             });
 

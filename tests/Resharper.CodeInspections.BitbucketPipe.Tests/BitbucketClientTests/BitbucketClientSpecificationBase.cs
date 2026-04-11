@@ -11,7 +11,6 @@ public class BitbucketClientSpecificationBase : SpecificationBase
     private BitbucketClientSimpleMock BitbucketClientMock { get; set; }
     protected BitbucketClient BitbucketClient => BitbucketClientMock.BitbucketClient;
     protected Mock<HttpMessageHandler> HttpMessageHandlerMock => BitbucketClientMock.HttpMessageHandlerMock;
-    protected virtual bool UseAuthentication => true;
     private static bool CreateBuildStatus => true;
 
     protected override void Given()
@@ -20,6 +19,6 @@ public class BitbucketClientSpecificationBase : SpecificationBase
 
         var environmentInfo = new BitbucketEnvironmentInfo
             { Workspace = "workspace", RepoSlug = "repo-slug", CommitHash = "f46f058a160a42c68e4b30ee4598cbfc" };
-        BitbucketClientMock = new BitbucketClientSimpleMock(UseAuthentication, CreateBuildStatus, environmentInfo);
+        BitbucketClientMock = new BitbucketClientSimpleMock(CreateBuildStatus, environmentInfo);
     }
 }

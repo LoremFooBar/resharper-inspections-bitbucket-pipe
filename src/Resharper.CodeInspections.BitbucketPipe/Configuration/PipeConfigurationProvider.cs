@@ -14,15 +14,15 @@ public class PipeConfigurationProvider : ConfigurationProvider
     {
         Data = new Dictionary<string, string?>(StringComparer.OrdinalIgnoreCase)
         {
-            ["BitbucketAuthenticationOptions:Username"] =
-                _envVarProvider.GetString("BITBUCKET_USERNAME"),
-            ["BitbucketAuthenticationOptions:AppPassword"] =
-                _envVarProvider.GetString("BITBUCKET_APP_PASSWORD"),
+            ["BitbucketAuthenticationOptions:Email"] =
+                _envVarProvider.GetRequiredString("ACCOUNT_EMAIL"),
+            ["BitbucketAuthenticationOptions:ApiToken"] =
+                _envVarProvider.GetRequiredString("API_TOKEN"),
 
             ["PipeOptions:CreateBuildStatus"] =
                 _envVarProvider.GetStringOrDefault("CREATE_BUILD_STATUS", "true"),
             ["PipeOptions:InspectionsXmlPathOrPattern"] =
-                _envVarProvider.GetString("INSPECTIONS_XML_PATH"),
+                _envVarProvider.GetRequiredString("INSPECTIONS_XML_PATH"),
             ["PipeOptions:IncludeOnlyIssuesInDiff"] =
                 _envVarProvider.GetStringOrDefault("INCLUDE_ONLY_ISSUES_IN_DIFF", "false"),
             ["PipeOptions:FailWhenIssuesFound"] =

@@ -1,5 +1,4 @@
-﻿using System.Net;
-using IdentityModel.Client;
+﻿using IdentityModel.Client;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -73,25 +72,7 @@ public class PipeRunner
             .AddSingleton<ReSharperReportCreator>();
     }
 
-    private void SetupBitbucketClient(IServiceCollection services, BitbucketAuthenticationOptions authOptions)
-    {
-        var httpClientBuilder = services.AddHttpClient<BitbucketClient>();
-
-        if (authOptions.UseAuthentication) {
-            Log.Debug("Authenticating using app password");
-            httpClientBuilder.ConfigureHttpClient(client =>
-                client.SetBasicAuthentication(authOptions.Username, authOptions.AppPassword));
-        }
-        else if (!_pipeEnvironment.IsDevelopment) {
-            // set proxy for pipe when running in pipelines
-            const string proxyUrl = "http://host.docker.internal:29418";
-
-            Log.Debug("Using proxy {Proxy}", proxyUrl);
-            Log.Information("Not using authentication - can't create build status");
-            httpClientBuilder.ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
-                { Proxy = new WebProxy(proxyUrl) });
-        }
-        else
-            Log.Error("Could not authenticate to Bitbucket!");
-    }
+    private static void SetupBitbucketClient(IServiceCollection services, BitbucketAuthenticationOptions authOptions) =>
+        services.AddHttpClient<BitbucketClient>().ConfigureHttpClient(client =>
+            client.SetBasicAuthentication(authOptions.Email, authOptions.ApiToken));
 }

@@ -26,7 +26,7 @@ public class When_Creating_Report_From_File_That_Does_Not_Contain_Issues : Speci
             CommitHash = "f46f058a160a42c68e4b30ee4598cbfc",
         };
 
-        var bitbucketClientSimpleMock = new BitbucketClientSimpleMock(true, true, environmentInfo);
+        var bitbucketClientSimpleMock = new BitbucketClientSimpleMock(true, environmentInfo);
         var pipeOptions = Mock.Of<IOptions<PipeOptions>>(options => options.Value.IncludeOnlyIssuesInDiff == false);
         _reSharperReportCreator = new ReSharperReportCreator(pipeOptions, bitbucketClientSimpleMock.BitbucketClient,
             NullLogger<ReSharperReportCreator>.Instance);

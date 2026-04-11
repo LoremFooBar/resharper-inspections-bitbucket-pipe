@@ -12,5 +12,7 @@ public class PipeEnvironment
     }
 
     public bool IsDebugMode { get; }
+
+    // ReSharper disable once UnusedAutoPropertyAccessor.Global
     public bool IsDevelopment { get; }
 }

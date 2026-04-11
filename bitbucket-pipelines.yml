@@ -10,11 +10,11 @@ definitions:
           - dotnet jb inspectcode --no-build --config=inspectcode.config -f=xml
 
           # create resharper inspections report
-          - pipe: docker://loremfoobar/resharper-inspections-bitbucket-pipe:1.1.0
+          - pipe: docker://loremfoobar/resharper-inspections-bitbucket-pipe:2.0.0-dev001
             variables:
               INSPECTIONS_XML_PATH: "inspect.xml"
-              BITBUCKET_USERNAME: $LFB_BB_USERNAME
-              BITBUCKET_APP_PASSWORD: $LFB_READ_BB_APP_PASSWORD
+              ACCOUNT_EMAIL: $LFB_BB_EMAIL
+              API_TOKEN: $LFB_API_TOKEN_REPO_READ
               DEBUG: "true"
 
           - |-

@@ -12,20 +12,18 @@ namespace Resharper.CodeInspections.BitbucketPipe.BitbucketApiClient;
 
 public partial class BitbucketClient
 {
-    private readonly BitbucketAuthenticationOptions _authOptions;
     private readonly BitbucketEnvironmentInfo _bitbucketEnvironmentInfo;
     private readonly HttpClient _httpClient;
     private readonly ILogger<BitbucketClient> _logger;
     private readonly PipeOptions _pipeOptions;
 
-    public BitbucketClient(HttpClient client, IOptions<BitbucketAuthenticationOptions> authOptions,
+    public BitbucketClient(HttpClient client,
         IOptions<PipeOptions> pipeOptions, BitbucketEnvironmentInfo bitbucketEnvironmentInfo,
         ILogger<BitbucketClient> logger)
     {
         _httpClient = client;
         _bitbucketEnvironmentInfo = bitbucketEnvironmentInfo;
         _pipeOptions = pipeOptions.Value;
-        _authOptions = authOptions.Value;
         _logger = logger;
 
         ConfigureHttpClient();
@@ -35,12 +33,10 @@ public partial class BitbucketClient
 
     private void ConfigureHttpClient()
     {
-        string baseUriScheme = _authOptions.UseAuthentication ? "https" : "http";
         _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         _httpClient.BaseAddress =
             new Uri(
-                $"{baseUriScheme}://api.bitbucket.org/2.0/repositories/" +
-                $"{_bitbucketEnvironmentInfo.Workspace}/{_bitbucketEnvironmentInfo.RepoSlug}/");
+                $"https://api.bitbucket.org/2.0/repositories/{_bitbucketEnvironmentInfo.Workspace}/{_bitbucketEnvironmentInfo.RepoSlug}/");
     }
 
     private static string Serialize(object obj)

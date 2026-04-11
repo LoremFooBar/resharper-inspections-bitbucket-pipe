@@ -14,7 +14,7 @@ namespace Resharper.CodeInspections.BitbucketPipe.Tests.Helpers;
 /// </summary>
 public class BitbucketClientSimpleMock
 {
-    public BitbucketClientSimpleMock(bool useAuthentication, bool createBuildStatus,
+    public BitbucketClientSimpleMock(bool createBuildStatus,
         BitbucketEnvironmentInfo environmentInfo)
     {
         HttpMessageHandlerMock = new Mock<HttpMessageHandler>();
@@ -24,16 +24,11 @@ public class BitbucketClientSimpleMock
             .SetupAnyRequest()
             .ReturnsResponse(HttpStatusCode.OK);
 
-        var authOptionsPoco = useAuthentication
-            ? new BitbucketAuthenticationOptions { Username = "user", AppPassword = "pass" }
-            : new BitbucketAuthenticationOptions { Username = "", AppPassword = "" };
-        var authOptions = new OptionsWrapper<BitbucketAuthenticationOptions>(authOptionsPoco);
-
         var pipeOptionsPoco = new PipeOptions { CreateBuildStatus = createBuildStatus };
         var pipeOptions = new OptionsWrapper<PipeOptions>(pipeOptionsPoco);
 
         BitbucketClient =
-            new BitbucketClient(httpClient, authOptions, pipeOptions, environmentInfo,
+            new BitbucketClient(httpClient, pipeOptions, environmentInfo,
                 NullLogger<BitbucketClient>.Instance);
     }
 

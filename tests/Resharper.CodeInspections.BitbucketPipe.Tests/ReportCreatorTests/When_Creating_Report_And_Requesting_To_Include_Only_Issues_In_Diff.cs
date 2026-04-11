@@ -33,7 +33,6 @@ public class When_Creating_Report_And_Requesting_To_Include_Only_Issues_In_Diff 
 
         var httpClient = messageHandler.CreateClient();
         var bitbucketClient = new BitbucketClient(httpClient,
-            new OptionsWrapper<BitbucketAuthenticationOptions>(new BitbucketAuthenticationOptions()),
             new OptionsWrapper<PipeOptions>(new PipeOptions()),
             environmentInfo,
             NullLogger<BitbucketClient>.Instance);

@@ -17,8 +17,8 @@ script:
   - pipe: docker://loremfoobar/resharper-inspections-bitbucket-pipe:1.1.0
     variables:
       INSPECTIONS_XML_PATH: "<string>"
-      # BITBUCKET_USERNAME: "<string>" # Optional
-      # BITBUCKET_APP_PASSWORD: "<string>" # Optional
+      ACCOUNT_EMAIL: "<string>"
+      API_TOKEN: "<string>"
       # CREATE_BUILD_STATUS: "<boolean>" # Optional, default "true"
       # INCLUDE_ONLY_ISSUES_IN_DIFF: "<boolean>" # Optional, default "false"
       # DEBUG: "<boolean>" # Optional
@@ -29,8 +29,8 @@ script:
 | Variable                    | Usage                                                                                                                                                                                                                 |
 |-----------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | INSPECTIONS_XML_PATH (\*)   | Path to inspections xml file, relative to current directory. You can use patterns that <br/> are supported by [DirectoryInfo.GetFiles](https://docs.microsoft.com/en-us/dotnet/api/system.io.directoryinfo.getfiles). |
-| BITBUCKET_USERNAME          | Bitbucket username, required to create build status and to get PR diff. <br /> Note that this should be an account name, not the email.                                                                               |
-| BITBUCKET_APP_PASSWORD      | Bitbucket app password, required to create build status and to get PR diff.                                                                                                                                           |
+| ACCOUNT_EMAIL (\*)          | Atlassian account email, required to create build status and to get PR diff.                                                                                                                                          |
+| API_TOKEN (\*)              | API token, required to create build status and to get PR diff.                                                                                                                                                        |
 | CREATE_BUILD_STATUS         | Whether to create a new build status reflecting the results of the report. Default: `true`.                                                                                                                           |
 | FAIL_WHEN_ISSUES_FOUND      | Whether to fail current build step if any issues found. Default: `false`.                                                                                                                                             |
 | INCLUDE_ONLY_ISSUES_IN_DIFF | Whether to include only issues found in changes of current PR/commit. Default: `false`.                                                                                                                               |
@@ -43,22 +43,22 @@ _(\*) = required variable._
 ### Inspections File
 
 You need to create the inspections XML file before calling the pipe. To create
-the inspections XML file see
-[InspectCode Command-Line Tool](https://www.jetbrains.com/help/resharper/InspectCode.html)
-.
+the inspections XML file, see
+[InspectCode Command-Line Tool](https://www.jetbrains.com/help/resharper/InspectCode.html).
 
-### App Password
+### API Token
 
-App password is required for 2 pipe features:
+An API token is required for the following features:
 
-1. Create build status when `CREATE_BUILD_STATUS="true"`. Required permission:
-   Repositories - Read.
-2. Get diff (`INCLUDE_ONLY_ISSUES_IN_DIFF="true"` when in PRs). Required
-   permission: Pull requests - Read.
+| Feature               | Required scope               |
+|-----------------------|------------------------------|
+| Create a report       | `read:repository:bitbucket`  |
+| Create a build status | `read:repository:bitbucket`  |
+| Get commit diff       | `read:repository:bitbucket`  |
+| Get PR diff           | `read:pullrequest:bitbucket` |
 
-See Atlassian documentation on how to
-[generate an app password](https://confluence.atlassian.com/bitbucket/app-passwords-828781300.html)
-.
+See Atlassian documentation on how
+to [create an API token](https://support.atlassian.com/bitbucket-cloud/docs/create-an-api-token/).
 
 ## Examples
 
@@ -69,6 +69,8 @@ script:
   - pipe: docker://loremfoobar/resharper-inspections-bitbucket-pipe:1.1.0
     variables:
       INSPECTIONS_XML_PATH: "inspect.xml"
+      ACCOUNT_EMAIL: $EMAIL
+      API_TOKEN: $API_TOKEN
 ```
 
 With pattern:
@@ -78,18 +80,8 @@ script:
   - pipe: docker://loremfoobar/resharper-inspections-bitbucket-pipe:1.1.0
     variables:
       INSPECTIONS_XML_PATH: "src/*/inspect.xml"
-```
-
-With app password (you should use secure variables for username and app
-password):
-
-```yaml
-script:
-  - pipe: docker://loremfoobar/resharper-inspections-bitbucket-pipe:1.1.0
-    variables:
-      INSPECTIONS_XML_PATH: "inspect.xml"
-      BITBUCKET_USERNAME: $USERNAME
-      BITBUCKET_APP_PASSWORD: $APP_PASSWORD
+      ACCOUNT_EMAIL: $EMAIL
+      API_TOKEN: $API_TOKEN
 ```
 
 With build status creation disabled:
@@ -99,8 +91,8 @@ script:
   - pipe: docker://loremfoobar/resharper-inspections-bitbucket-pipe:1.1.0
     variables:
       INSPECTIONS_XML_PATH: "inspect.xml"
-      BITBUCKET_USERNAME: $USERNAME
-      BITBUCKET_APP_PASSWORD: $APP_PASSWORD
+      ACCOUNT_EMAIL: $EMAIL
+      API_TOKEN: $API_TOKEN
       CREATE_BUILD_STATUS: "false"
 ```
 

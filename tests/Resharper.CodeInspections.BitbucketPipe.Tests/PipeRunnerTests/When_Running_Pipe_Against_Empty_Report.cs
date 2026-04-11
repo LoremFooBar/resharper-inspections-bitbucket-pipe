@@ -16,8 +16,8 @@ public class When_Running_Pipe_Against_Empty_Report : PipeRunnerSpecificationBas
         var environmentVariableProviderMock = new EnvironmentVariableProviderMock(TestData.EmptyReportFilePath,
             new Dictionary<string, string>
             {
-                ["BITBUCKET_USERNAME"] = "user",
-                ["BITBUCKET_APP_PASSWORD"] = "password",
+                ["ACCOUNT_EMAIL"] = "user@example.com",
+                ["API_TOKEN"] = "password",
                 ["CREATE_BUILD_STATUS"] = "true",
             });
 

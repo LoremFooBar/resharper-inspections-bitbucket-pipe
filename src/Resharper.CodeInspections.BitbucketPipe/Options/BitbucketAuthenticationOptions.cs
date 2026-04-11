@@ -1,15 +1,10 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-namespace Resharper.CodeInspections.BitbucketPipe.Options;
+﻿namespace Resharper.CodeInspections.BitbucketPipe.Options;
 
 [Serializable]
 public class BitbucketAuthenticationOptions
 {
     public const string SectionName = "BitbucketAuthenticationOptions";
 
-    public string? Username { get; set; }
-    public string? AppPassword { get; set; }
-
-    [MemberNotNullWhen(true, nameof(Username), nameof(AppPassword))]
-    public bool UseAuthentication => !string.IsNullOrWhiteSpace(Username) && !string.IsNullOrWhiteSpace(AppPassword);
+    public required string Email { get; set; }
+    public required string ApiToken { get; set; }
 }

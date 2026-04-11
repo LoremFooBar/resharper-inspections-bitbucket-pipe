@@ -42,5 +42,7 @@ public class EnvironmentVariableProviderMock
         ["BITBUCKET_COMMIT"] = "f46f058a160a42c68e4b30ee4598cbfc",
         ["INSPECTIONS_XML_PATH"] = "inspect.xml",
         ["BITBUCKET_CLONE_DIR"] = Path.GetTempPath(),
+        ["ACCOUNT_EMAIL"] = "user@example.com",
+        ["API_TOKEN"] = "token",
     };
 }

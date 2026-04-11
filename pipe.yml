@@ -13,3 +13,15 @@ tags:
   - jetbrains
   - dotnet
   - .net
+variables:
+  - name: INSPECTIONS_XML_PATH
+  - name: ACCOUNT_EMAIL
+  - name: API_TOKEN
+  - name: CREATE_BUILD_STATUS
+    default: "true"
+  - name: INCLUDE_ONLY_ISSUES_IN_DIFF
+    default: "false"
+  - name: FAIL_WHEN_ISSUES_FOUND
+    default: "false"
+  - name: DEBUG
+    default: "false"

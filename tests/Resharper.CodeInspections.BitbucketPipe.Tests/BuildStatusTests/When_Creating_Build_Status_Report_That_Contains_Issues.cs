@@ -28,7 +28,7 @@ public class When_Creating_Build_Status_Report_That_Contains_Issues : Specificat
             CommitHash = "f46f058a160a42c68e4b30ee4598cbfc",
         };
 
-        var bitbucketClientSimpleMock = new BitbucketClientSimpleMock(true, true, environmentInfo);
+        var bitbucketClientSimpleMock = new BitbucketClientSimpleMock(true, environmentInfo);
         IOptions<PipeOptions> pipeOptions = new OptionsWrapper<PipeOptions>(new PipeOptions());
         var reSharperReportCreator = new ReSharperReportCreator(pipeOptions, bitbucketClientSimpleMock.BitbucketClient,
             NullLogger<ReSharperReportCreator>.Instance);
