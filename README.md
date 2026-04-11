@@ -14,7 +14,7 @@ your `bitbucket-pipelines.yml` file:
 
 ```yaml
 script:
-  - pipe: docker://loremfoobar/resharper-inspections-bitbucket-pipe:1.1.0
+  - pipe: docker://loremfoobar/resharper-inspections-bitbucket-pipe:2.0.0
     variables:
       INSPECTIONS_XML_PATH: "<string>"
       ACCOUNT_EMAIL: "<string>"
@@ -66,7 +66,7 @@ Basic example:
 
 ```yaml
 script:
-  - pipe: docker://loremfoobar/resharper-inspections-bitbucket-pipe:1.1.0
+  - pipe: docker://loremfoobar/resharper-inspections-bitbucket-pipe:2.0.0
     variables:
       INSPECTIONS_XML_PATH: "inspect.xml"
       ACCOUNT_EMAIL: $EMAIL
@@ -77,7 +77,7 @@ With pattern:
 
 ```yaml
 script:
-  - pipe: docker://loremfoobar/resharper-inspections-bitbucket-pipe:1.1.0
+  - pipe: docker://loremfoobar/resharper-inspections-bitbucket-pipe:2.0.0
     variables:
       INSPECTIONS_XML_PATH: "src/*/inspect.xml"
       ACCOUNT_EMAIL: $EMAIL
@@ -88,7 +88,7 @@ With build status creation disabled:
 
 ```yaml
 script:
-  - pipe: docker://loremfoobar/resharper-inspections-bitbucket-pipe:1.1.0
+  - pipe: docker://loremfoobar/resharper-inspections-bitbucket-pipe:2.0.0
     variables:
       INSPECTIONS_XML_PATH: "inspect.xml"
       ACCOUNT_EMAIL: $EMAIL
